@@ -4,8 +4,8 @@ from django.db import models
 class Student(models.Model):
     dep = models.CharField(max_length=50)
     branch = models.CharField(max_length=10)
-    roll_no = models.IntegerField()
-    enr_no = models.BigIntegerField()
+    roll_no = models.CharField(max_length=100)
+    enr_no = models.CharField(max_length=100)
     batch = models.CharField(max_length=10)  
     name = models.CharField(max_length=100)
     password = models.CharField(max_length=100, blank=True, null=True)
