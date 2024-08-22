@@ -28,6 +28,28 @@ const Signup = () => {
 
 	useEffect(() => {
 		if (localStorage.getItem("loggedIn") === "true") navigate("/");
+		const token = localStorage.getItem("token");
+		if (token) {
+			const payload = JSON.parse(atob(token.split(".")[1]));
+			const expiration = new Date(payload.exp * 1000);
+			const now = new Date();
+
+			if (now >= expiration) {
+				localStorage.removeItem("token");
+				localStorage.setItem("loggedIn", "false");
+				navigate("/signin");
+				toast.error("Session expired, please log in again.");
+			} else {
+				// Set a timeout to remove the token just before it expires
+				const timeout = expiration.getTime() - now.getTime();
+				setTimeout(() => {
+					localStorage.removeItem("token");
+					localStorage.setItem("loggedIn", "false");
+					navigate("/signin");
+					toast.error("Session expired, please log in again.");
+				}, timeout);
+			}
+		}
 	}, [navigate]);
 
 	function checkPasswords() {

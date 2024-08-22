@@ -48,7 +48,7 @@ class StudentSignupView(APIView):
                     if student.password:
                         return Response({
                             'status': 400,
-                            'message': 'Student already Registered'
+                            'message': 'Account Already exists, Please SignIn'
                         })
                     else:
                         student.password = make_password(serializer.validated_data.get('password'))
@@ -122,7 +122,7 @@ class StudentSigninView(APIView):
             except Exception as e:
                 return Response({
                     'status': 500,
-                    'message': 'Error while creating student',
+                    'message': 'You are not Registered yet',
                     'error': str(e)
                 })
         else:
@@ -141,6 +141,7 @@ class StudentSigninView(APIView):
         return token
 
 class GetStudentView(APIView):
+    
     permission_classes = [AllowAny]  # Ensure the user is authenticated
 
     def get(self, request, format=None):
@@ -181,4 +182,83 @@ class GetStudentView(APIView):
                 'status': 500,
                 'message': 'Error while fetching user data',
                 'error': str(e)
+            })
+        
+
+class PostDoubtView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        try:
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'Please log in first.'
+                })
+
+            # Decode token to get user information
+            try:
+                payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                return Response({
+                    'status': 401,
+                    'message': 'Token has expired. Please log in again.'
+                })
+            except jwt.InvalidTokenError:
+                return Response({
+                    'status': 401,
+                    'message': 'Invalid token. Please log in again.'
+                })
+
+            student = Student.objects.filter(enr_no=payload.get('enr_no')).first()
+            if not student:
+                return Response({
+                    'status': 404,
+                    'message': 'Student not found.'
+                })
+            
+            typeOfDoubt = request.data['doubtFor']
+            if(typeOfDoubt == 'All'):
+                typeOfDoubt = 'All'
+            elif(typeOfDoubt == 'Batch'):
+                typeOfDoubt = student.batch
+            elif(typeOfDoubt == 'Department'):
+                typeOfDoubt = student.dep
+            else:
+                return Response({
+                    'status': 400,
+                    'message' : 'Please provide a type for doubt'
+                })            
+
+            # Create serializer with the validated data
+            serializer = PostDoubtSerializer(data={
+                'subject': request.data['subject'],
+                'doubt': request.data['doubt'],
+                'doubtFor' : typeOfDoubt
+            })
+
+            try:
+                if serializer.is_valid():
+                # Manually assign the student instance to the postedBy field before saving
+                    serializer.save(postedBy=student)
+                    return Response({
+                        'status': 200,
+                        'message': 'The doubt is successfully posted.'
+                    })
+                else:
+                    return Response({
+                        'status': 400,
+                        'errors': serializer.errors['error'][0]
+                    })
+            except Exception as e:
+                return Response({
+                    'status': 500,
+                    'message': serializer.errors['error'][0]
+                })
+
+        except Exception as e:
+            return Response({
+                'status': 500,
+                'message': f'Error while posting doubt: {str(e)}'
             })
