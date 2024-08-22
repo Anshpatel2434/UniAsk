@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const PostDoubt = () => {
 	const navigate = useNavigate();
@@ -15,34 +16,12 @@ const PostDoubt = () => {
 
 	useEffect(() => {
 		if (localStorage.getItem("loggedIn") === "false") navigate("/signin");
-		const token = localStorage.getItem("token");
-		if (token) {
-			const payload = JSON.parse(atob(token.split(".")[1]));
-			const expiration = new Date(payload.exp * 1000);
-			const now = new Date();
-
-			if (now >= expiration) {
-				localStorage.removeItem("token");
-				localStorage.setItem("loggedIn", "false");
-				navigate("/signin");
-				toast.error("Session expired, please log in again.");
-			} else {
-				// Set a timeout to remove the token just before it expires
-				const timeout = expiration.getTime() - now.getTime();
-				setTimeout(() => {
-					localStorage.removeItem("token");
-					localStorage.setItem("loggedIn", "false");
-					navigate("/signin");
-					toast.error("Session expired, please log in again.");
-				}, timeout);
-			}
-		}
 	}, [navigate]);
 
 	async function sendRequest(e) {
 		e.preventDefault();
 		console.log(doubt);
-		if (doubt.doubt == "") {
+		if (doubt.doubt === "") {
 			toast.error("Please enter your doubt");
 			return;
 		}
@@ -76,24 +55,25 @@ const PostDoubt = () => {
 	}
 
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-900">
+		<div className="flex items-center justify-center min-h-screen bg-[#1d1b31]">
+			<Sidebar />
 			<Toaster />
-			<div className="w-full max-w-lg p-8 bg-gray-800 shadow-2xl rounded-lg border-2 border-gray-700">
-				<h1 className="text-3xl font-bold mb-6 text-center text-green-400">
+			<div className="w-full max-w-lg p-8 bg-[#11101d] shadow-2xl rounded-lg border border-[#2e2c4e]">
+				<h1 className="text-3xl font-bold mb-6 text-center text-white">
 					Post Your Doubt
 				</h1>
 				<form onSubmit={sendRequest} className="space-y-6">
 					<div>
 						<label
 							htmlFor="doubt"
-							className="block text-sm font-medium text-gray-300 mb-2"
+							className="block text-sm font-medium text-gray-400 mb-2"
 						>
 							Write your Doubt:
 						</label>
 						<textarea
 							id="doubt"
 							rows="5"
-							className="w-full px-3 py-2 border-2 border-dashed border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-700 text-white resize-none"
+							className="w-full px-3 py-2 border-2 border-[#2e2c4e] rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e4b73] bg-[#1d1b31] text-white resize-none"
 							placeholder="Describe your doubt here..."
 							onChange={(e) =>
 								setDoubt({
@@ -106,13 +86,13 @@ const PostDoubt = () => {
 					<div>
 						<label
 							htmlFor="subject"
-							className="block text-sm font-medium text-gray-300 mb-2"
+							className="block text-sm font-medium text-gray-400 mb-2"
 						>
 							Select the subject for your doubt:
 						</label>
 						<select
 							id="subject"
-							className="w-full px-3 py-2 border-2 border-dashed border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-700 text-white"
+							className="w-full px-3 py-2 border-2 border-[#2e2c4e] rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e4b73] bg-[#1d1b31] text-white"
 							onChange={(e) =>
 								setDoubt({
 									...doubt,
@@ -131,13 +111,13 @@ const PostDoubt = () => {
 					<div>
 						<label
 							htmlFor="doubtFor"
-							className="block text-sm font-medium text-gray-300 mb-2"
+							className="block text-sm font-medium text-gray-400 mb-2"
 						>
 							Select where you want to post your doubt:
 						</label>
 						<select
 							id="doubtFor"
-							className="w-full px-3 py-2 border-2 border-dashed border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-700 text-white"
+							className="w-full px-3 py-2 border-2 border-[#2e2c4e] rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e4b73] bg-[#1d1b31] text-white"
 							onChange={(e) =>
 								setDoubt({
 									...doubt,
@@ -154,7 +134,7 @@ const PostDoubt = () => {
 					<div className="text-center">
 						<button
 							type="submit"
-							className="w-full mt-4 px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-700 transition-colors border-2 border-gray-600"
+							className="w-full mt-4 px-4 py-2 bg-[#4e4b73] text-white font-semibold rounded-md hover:bg-white hover:text-[#1d1b31] transition-colors border border-[#2e2c4e]"
 						>
 							Submit
 						</button>

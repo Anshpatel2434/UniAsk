@@ -4,7 +4,7 @@ import { RxCross2 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import image from "../assets/AuthImage.jpg";
-import { LuEye, LuEyeOff } from "react-icons/lu";
+import { LuEye, LuEyeOff, LuUser, LuLock } from "react-icons/lu";
 import { AppContext } from "../context/AppContext";
 
 const Signup = () => {
@@ -119,122 +119,152 @@ const Signup = () => {
 					navigate("/");
 				}, 1000);
 			} else {
-				alert(res.data.message);
+				toast.error("Signup Failed");
 			}
 		} catch (error) {
 			console.log(error);
-			alert(error);
+			toast.error("Signup Failed");
 		}
 	}
 
 	return (
-		<div className="min-w-screen min-h-screen flex items-center justify-center bg-gray-800">
+		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0d0d2d] to-[#1a1a3a]">
 			<Toaster />
-			<div className="relative w-full max-w-6xl h-auto max-h-[40rem] bg-gray-900 shadow-2xl flex flex-col md:flex-row rounded-lg overflow-hidden">
-				<RxCross2
-					className="absolute top-5 left-5 text-white text-3xl hover:cursor-pointer"
-					onClick={() => navigate("/")}
-				/>
-				<div className="w-full flex flex-col justify-evenly items-center md:w-1/2 bg-gray-800 p-8">
-					<h2 className="text-4xl font-semibold text-white mb-6">Sign Up</h2>
-					<form
-						onSubmit={(e) => e.preventDefault()}
-						className="flex flex-col justify-center items-center gap-6 w-[60%]"
-					>
-						<div className="w-full flex flex-col gap-4">
-							<LablledInput
-								lable="Enter Your Enrollment Number:"
-								placeholder="220002316832481"
+			<div className="w-full max-w-4xl bg-[#1d1b31] rounded-2xl shadow-2xl overflow-hidden">
+				<div className="flex flex-col md:flex-row">
+					<div className="w-full md:w-1/2 p-12">
+						<div className="text-center mb-10">
+							<h2 className="text-4xl font-bold text-white mb-2">
+								Create Account
+							</h2>
+							<p className="text-gray-400">Join us today!</p>
+						</div>
+						<form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+							<LabelledInput
+								label="Enrollment Number"
+								placeholder="Enter your enrollment number"
 								value="enr_no"
-								onchange={(e) => handleChange(e, "enr_no")}
+								onChange={(e) => handleChange(e, "enr_no")}
 								type="text"
+								icon={<LuUser className="w-5 h-5 text-gray-400" />}
 							/>
 							<div className="relative">
-								<LablledInput
-									lable="Set Your Password:"
-									placeholder="Password must contains 8 characters"
+								<LabelledInput
+									label="Password"
+									placeholder="Set your password"
 									value="password"
-									onchange={(e) => handleChange(e, "password")}
-									type={`${show ? "text" : "password"}`}
+									onChange={(e) => handleChange(e, "password")}
+									type={show ? "text" : "password"}
+									icon={<LuLock className="w-5 h-5 text-gray-400" />}
 								/>
 								{show ? (
 									<LuEye
-										className="absolute text-2xl top-10 right-3 text-white hover:cursor-pointer"
+										className="absolute text-2xl top-9 right-3 text-gray-400 hover:text-white cursor-pointer transition-colors duration-200"
 										onClick={() => setShow(!show)}
 									/>
 								) : (
 									<LuEyeOff
-										className="absolute text-2xl top-10 right-3 text-white hover:cursor-pointer"
+										className="absolute text-2xl top-9 right-3 text-gray-400 hover:text-white cursor-pointer transition-colors duration-200"
 										onClick={() => setShow(!show)}
 									/>
 								)}
 							</div>
 							<div className="relative">
-								<LablledInput
-									lable="Confirm Your Password:"
-									placeholder="Password must contains 8 characters"
+								<LabelledInput
+									label="Confirm Password"
+									placeholder="Confirm your password"
 									value="confirmPassword"
-									onchange={(e) => handleChange(e, "confirmPassword")}
-									type={`${showC ? "text" : "password"}`}
+									onChange={(e) => handleChange(e, "confirmPassword")}
+									type={showC ? "text" : "password"}
+									icon={<LuLock className="w-5 h-5 text-gray-400" />}
 								/>
 								{showC ? (
 									<LuEye
-										className="absolute text-2xl top-10 right-3 text-white hover:cursor-pointer"
+										className="absolute text-2xl top-9 right-3 text-gray-400 hover:text-white cursor-pointer transition-colors duration-200"
 										onClick={() => setShowC(!showC)}
 									/>
 								) : (
 									<LuEyeOff
-										className="absolute text-2xl top-10 right-3 text-white hover:cursor-pointer"
+										className="absolute text-2xl top-9 right-3 text-gray-400 hover:text-white cursor-pointer transition-colors duration-200"
 										onClick={() => setShowC(!showC)}
 									/>
 								)}
 							</div>
 							<button
-								className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-full shadow-md transform transition duration-200 hover:scale-105"
+								className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
 								onClick={checkPasswords}
 							>
 								Sign Up
 							</button>
-						</div>
-						<p className="text-gray-300 text-center mt-4">
-							Already signed in?{" "}
-							<div
+						</form>
+						<p className="text-gray-400 text-center mt-8">
+							Already have an account?{" "}
+							<span
 								onClick={() => navigate("/signin")}
-								className="text-blue-400 hover:underline hover:cursor-pointer"
+								className="text-blue-400 hover:underline cursor-pointer"
 							>
 								Sign in here
-							</div>
+							</span>
 						</p>
-					</form>
+					</div>
+					<div className="hidden md:block w-1/2 relative">
+						<img
+							src={image}
+							alt="Auth"
+							className="absolute inset-0 w-full h-full object-cover"
+						/>
+						<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+							<div className="text-center">
+								<h3 className="text-white text-3xl font-bold mb-4">
+									Welcome Back
+								</h3>
+								<p className="text-gray-200 mb-6">
+									To keep connected with us please login with your personal info
+								</p>
+								<button
+									onClick={() => navigate("/signin")}
+									className="bg-transparent border-2 border-white text-white py-2 px-6 rounded-full font-semibold hover:bg-white hover:text-[#1d1b31] transition duration-300"
+								>
+									Sign In
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div
-					className="w-full md:w-1/2 md:h-auto md:max-h-full bg-cover bg-center hidden md:block"
-					style={{ backgroundImage: `url(${image})` }}
-				></div>
 			</div>
+			<RxCross2
+				className="absolute top-5 right-5 text-white text-3xl hover:text-gray-300 cursor-pointer transition-colors duration-200"
+				onClick={() => navigate("/")}
+			/>
 		</div>
 	);
 };
 
-const LablledInput = ({
-	lable,
+const LabelledInput = ({
+	label,
 	placeholder,
-	onchange,
+	onChange,
 	value,
 	type = "text",
+	icon,
 }) => {
 	return (
-		<div className="flex flex-col mb-1">
-			<label className="mb-1 text-sm font-medium text-gray-300" htmlFor={value}>
-				{lable}
+		<div className="flex flex-col mb-4">
+			<label className="mb-2 text-sm font-medium text-gray-300" htmlFor={value}>
+				{label}
 			</label>
-			<input
-				placeholder={placeholder}
-				type={type}
-				id={value}
-				onChange={onchange}
-				className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder-gray-500"
-			/>
+			<div className="relative">
+				<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+					{icon}
+				</div>
+				<input
+					placeholder={placeholder}
+					type={type}
+					id={value}
+					onChange={onChange}
+					className="w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#2a2849] text-white placeholder-gray-400 transition duration-200"
+				/>
+			</div>
 		</div>
 	);
 };

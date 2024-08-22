@@ -184,7 +184,6 @@ class GetStudentView(APIView):
                 'error': str(e)
             })
         
-
 class PostDoubtView(APIView):
     permission_classes = [AllowAny]
 
@@ -262,3 +261,7 @@ class PostDoubtView(APIView):
                 'status': 500,
                 'message': f'Error while posting doubt: {str(e)}'
             })
+        
+
+class PostSolutionView(APIView):
+    pass        
