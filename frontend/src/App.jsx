@@ -3,6 +3,7 @@ import "./App.css";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Home from "./pages/Home";
+import Sidebar from "./components/Sidebar";
 import PostDoubt from "./pages/PostDoubt";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
 				<Route path="/signup" element={<Signup />} />
 				<Route path="/signin" element={<Signin />} />
 				<Route path="/postDoubt" element={<PostDoubt />} />
+        <Route path="/sidebar" element={<Sidebar />} />
 			</Routes>
 		</BrowserRouter>
 	);
