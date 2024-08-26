@@ -5,6 +5,7 @@ import Signin from "./pages/Signin";
 import Home from "./pages/Home";
 import Sidebar from "./components/Sidebar";
 import PostDoubt from "./pages/PostDoubt";
+import Dashboard from "./pages/Dashboard";
 import RegisteredUsersPage from "./pages/RegUsers";
 import DoubtPage from "./pages/DoubtPage";
 import SolutionInfo from "./components/SolutionInfo";
@@ -18,7 +19,7 @@ function App() {
 				<Route path="/signin" element={<Signin />} />
 				<Route path="/postDoubt" element={<PostDoubt />} />
         <Route path="/reguser" element={<RegisteredUsersPage />} />
-				<Route path="/sidebar" element={<Sidebar />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 				<Route path="/doubt/:doubt_id" element={<DoubtPage />} />
 				<Route path="/solution/:solution_id" element={<SolutionInfo />} />
 			</Routes>
