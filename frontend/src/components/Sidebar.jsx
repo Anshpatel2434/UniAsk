@@ -13,7 +13,6 @@ const Sidebar = () => {
 	const toggleSidebar = () => {
 		setIsOpen(!isOpen);
 	};
-
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		// if (!token) navigate("/signin");
