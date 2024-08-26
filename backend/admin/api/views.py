@@ -565,3 +565,41 @@ class GetStudentByIdView(APIView):
                 'message': 'Error while fetching user data',
                 'error': str(e)
             })
+
+class GetAllDoubtView(APIView):
+    permission_classes = [AllowAny]  # No authentication required for this view
+
+    def get(self, request, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+
+            # Fetch the doubt object
+            doubt = Doubt.objects.all()
+
+            if doubt:
+                # Serialize the doubt object using the GetDoubtSerializer
+                serializer = DoubtSerializer(doubt, many=True)
+                return Response({
+                    'status': 200,
+                    'doubts': serializer.data  # Return serialized data
+                })
+            
+            # If doubt is not found 
+            return Response({
+                'status': 404,
+                'message': 'Doubts not found'
+            })
+            
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
+                'error': str(e)
+            })
