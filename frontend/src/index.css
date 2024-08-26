@@ -3,27 +3,39 @@
 @tailwind utilities;
 
 .bg-paper-pattern {
-	background-image: url("./assets/PaperBg1.jpg");
+  background-image: url("./assets/PaperBg1.jpg");
 }
 
 .paper-background {
-	background: url("./assets/PaperBg1.jpg");
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-blend-mode: darken;
+  background: url("./assets/PaperBg1.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: darken;
 }
 
 .form-background {
-	background: linear-gradient(
-			rgba(255, 255, 255, 0.6),
-			rgba(255, 255, 255, 0.6)
-		),
-		url("./assets/PaperBg.jpg");
-	background-size: cover;
-	background-position: center;
-	background-blend-mode: darken;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.6),
+      rgba(255, 255, 255, 0.6)
+    ),
+    url("./assets/PaperBg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: darken;
 }
 
 .bg-paper-bg {
-	background-color: #fdf6e3; /* light paper-like color */
+  background-color: #fdf6e3; /* light paper-like color */
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
