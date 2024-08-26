@@ -10,6 +10,9 @@ class Student(models.Model):
     batch = models.CharField(max_length=10)  
     name = models.CharField(max_length=100)
     password = models.CharField(max_length=100, blank=True, null=True)
+    noOfDoubts = models.BigIntegerField()
+    noOfSolutions = models.BigIntegerField()
+    noOfUpvotes = models.BigIntegerField()
 
     def __str__(self):
         return self.name
@@ -29,6 +32,13 @@ class Solution(models.Model):
     solution = models.CharField(max_length=1000)
     postedBy = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='solutions')
     postedOn = models.DateTimeField(default=datetime.now)
+    upvotes = models.BigIntegerField(default=0)
 
     def __str__(self):
         return self.solution[:50]
+    
+class Vote(models.Model):
+    type = models.CharField(max_length=5)
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE, related_name='votes')
+    votedBy = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='votes')
+        

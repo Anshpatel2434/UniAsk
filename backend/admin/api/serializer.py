@@ -5,7 +5,13 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ('id', 'dep', 'branch', 'roll_no', 'enr_no', 'batch', 'name')
+        fields = ('id', 'dep', 'branch', 'roll_no', 'enr_no', 'batch', 'name', 'noOfDoubts', 'noOfSolutions', 'noOfUpvotes')
+
+class DoubtSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Doubt
+        fields = ('id', 'subject', 'doubt', 'postedBy', 'postedOn', 'doubtFor')
 
 class CreateStudentSerializer(serializers.ModelSerializer):
 
@@ -24,23 +30,42 @@ class StudentSignupSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Password must be at least 8 characters long.")
         return value       
     
+class VoteSerializer(serializers.ModelSerializer):
+    # Correcting how related fields are serialized
+    solution = serializers.PrimaryKeyRelatedField(read_only=True)  # Correct if you only need the primary key
+    votedBy = StudentSerializer(read_only=True)
+
+    class Meta:
+        model = Vote
+        fields = ('id', 'votedBy', 'solution', 'type')
+
+class PostVoteSerializer(serializers.ModelSerializer):
+    solution = serializers.PrimaryKeyRelatedField(read_only=True)  # Correct if you only need the primary key
+    votedBy = StudentSerializer(read_only=True)
+
+    class Meta:
+        model = Vote      
+        fields = ('type', 'solution', 'votedBy')  
+
+    
 class GetSolutionSerializer(serializers.ModelSerializer):
-    postedBy = serializers.StringRelatedField(read_only=True)  # To display the name of the student who posted the solution
+    postedBy = StudentSerializer(read_only=True)  # To display the name of the student who posted the solution
+    votes = VoteSerializer(many=True, read_only=True)
 
     class Meta:
         model = Solution
-        fields = ['id', 'solution', 'postedBy', 'postedOn']
+        fields = ['id', 'solution', 'postedBy', 'postedOn', 'votes', 'upvotes']
 
 class GetDoubtSerializer(serializers.ModelSerializer):
-    postedBy = serializers.StringRelatedField(read_only=True)  # To display the name of the student who posted the doubt
+    postedBy = StudentSerializer(read_only=True)  # To display the name of the student who posted the doubt
     solutions = GetSolutionSerializer(many=True, read_only=True)  # Nested serializer to include related solutions
 
     class Meta:
         model = Doubt
-        fields = ['id', 'subject', 'doubt', 'postedBy', 'postedOn', 'solutions']
+        fields = ['id', 'subject', 'doubt', 'postedBy', 'postedOn', 'solutions', 'doubtFor']
 
 class PostDoubtSerializer(serializers.ModelSerializer):
-    postedBy = serializers.StringRelatedField(read_only=True)  
+    postedBy = StudentSerializer(read_only=True)  
 
     class Meta:
         model = Doubt
@@ -60,4 +85,21 @@ class PostDoubtSerializer(serializers.ModelSerializer):
                 'error': "Doubt field cannot be empty."
             })
 
+        return attrs
+    
+class PostSolutionSerializer(serializers.ModelSerializer):
+    postedBy = StudentSerializer(read_only=True)
+    doubt = DoubtSerializer(read_only=True)
+
+    class Meta:
+        model = Solution
+        fields = ['doubt', 'postedBy', 'solution']
+
+    def validate(self, attrs):
+        # Ensure the solution is not empty
+        if not attrs.get('solution'):
+            raise serializers.ValidationError({
+                'error': "Solution field cannot be empty."
+                })
+        
         return attrs

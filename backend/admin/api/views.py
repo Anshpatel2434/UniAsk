@@ -161,12 +161,16 @@ class GetStudentView(APIView):
             if student:
                 # Return user data
                 user_data = {
+                    'id': student.id,
                     'dep': student.dep,
                     'branch': student.branch,
                     'roll_no': student.roll_no,
                     'enr_no': student.enr_no,
                     'batch': student.batch,
-                    'name': student.name
+                    'name': student.name,
+                    'noOfDoubts':student.noOfDoubts,
+                    'noOfSolutions':student.noOfSolutions,
+                    'noOfUpvotes':student.noOfUpvotes
                 }
                 return Response({
                     'status': 200,
@@ -237,9 +241,13 @@ class PostDoubtView(APIView):
                 'doubtFor' : typeOfDoubt
             })
 
+
             try:
                 if serializer.is_valid():
                 # Manually assign the student instance to the postedBy field before saving
+                
+                    student.noOfDoubts += 1
+                    student.save()
                     serializer.save(postedBy=student)
                     return Response({
                         'status': 200,
@@ -262,6 +270,263 @@ class PostDoubtView(APIView):
                 'message': f'Error while posting doubt: {str(e)}'
             })
         
-
 class PostSolutionView(APIView):
-    pass        
+    permission_classes = [AllowAny]
+
+    def post(self, request, doubt_id, format=None):
+        try:
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'Please log in first.'
+                })
+            
+            try:
+                payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                return Response({
+                    'status': 401,
+                    'message': 'Token has expired. Please log in again.'
+                })
+            except jwt.InvalidTokenError:
+                return Response({
+                    'status': 401,
+                    'message': 'Invalid token. Please log in again.'
+                })
+
+            student = Student.objects.filter(enr_no=payload.get('enr_no')).first()
+
+            if not student:
+                return Response({
+                    'status': 404,
+                    'message': 'Student not found.'
+                })
+            
+            doubt = Doubt.objects.filter(id=doubt_id).first()
+
+            serializer = PostSolutionSerializer(data={
+                'solution': request.data.get('solution'),
+            })
+
+            try:
+                if serializer.is_valid():
+                # Manually assign the student instance to the postedBy field before saving
+                    student.noOfSolutions += 1
+                    student.save()
+                    serializer.save(postedBy=student, doubt=doubt)
+                    return Response({
+                        'status': 200,
+                        'message': 'The solution is successfully posted.'
+                    })
+                else:
+                    return Response({
+                        'status': 400,
+                        'errors': serializer.errors['error'][0]
+                    })
+            except Exception as e:
+                return Response({
+                    'status': 500,
+                    'message': serializer.errors['error'][0]
+                })
+            
+            
+        except Exception as e:
+            return Response({
+                'status': 500,
+                'message': f'Error while posting doubt: {str(e)}'
+            })
+
+class GetDoubtView(APIView):
+    permission_classes = [AllowAny]  # No authentication required for this view
+
+    def get(self, request, doubt_id, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+
+            # Fetch the doubt object
+            doubt = Doubt.objects.filter(id=doubt_id).first()
+
+            if doubt:
+                # Serialize the doubt object using the GetDoubtSerializer
+                serializer = GetDoubtSerializer(doubt)
+                return Response({
+                    'status': 200,
+                    'doubt': serializer.data  # Return serialized data
+                })
+            
+            # If doubt is not found
+            return Response({
+                'status': 404,
+                'message': 'Doubt not found'
+            })
+            
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
+                'error': str(e)
+            })
+        
+class GetSolutionView(APIView):
+    permission_classes = [AllowAny]  # No authentication required for this view
+
+    def get(self, request, solution_id, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+
+            # Fetch the doubt object
+            solution = Solution.objects.filter(id=solution_id).first()
+
+            if solution:
+                # Serialize the doubt object using the GetDoubtSerializer
+                serializer = GetSolutionSerializer(solution)
+                return Response({
+                    'status': 200,
+                    'solution': serializer.data  # Return serialized data
+                })
+            
+            # If doubt is not found
+            return Response({
+                'status': 404,
+                'message': 'Solution not found'
+            })
+            
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
+                'error': str(e)
+            })
+
+class UpdateVoteView(APIView):
+    permission_classes = [AllowAny]  # No authentication required for this view
+
+    def post(self, request, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+            
+            try:
+                payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                return Response({
+                    'status': 401,
+                    'message': 'Token has expired. Please log in again.'
+                })
+            except jwt.InvalidTokenError:
+                return Response({
+                    'status': 401,
+                    'message': 'Invalid token. Please log in again.'
+                })
+
+            # Fetch the student based on token's enrollment number
+            student = Student.objects.filter(enr_no=payload.get('enr_no')).first()
+
+            if not student:
+                return Response({
+                    'status': 404,
+                    'message': 'Student not found.'
+                })
+            
+            # Fetch the solution object
+            solution = Solution.objects.filter(id=request.data.get('solution_id')).first()
+
+            if not solution:
+                return Response({
+                    'status': 404,
+                    'message': 'Solution not found'
+                })
+            
+            # Fetch student of the solution
+            studentOfSolution = Student.objects.filter(id=solution.postedBy.id).first()
+            
+            # Retrieve vote type from the request data
+            typeOfVote = request.data.get('type')
+            if typeOfVote not in ['UP', 'DOWN']:
+                return Response({
+                    'status': 400,
+                    'message': 'Please provide a valid type for vote'
+                })
+
+            # Check if a vote already exists
+            existing_vote = Vote.objects.filter(votedBy=student, solution=solution).first()
+
+            if existing_vote:
+                # Update vote if the type is different
+                if existing_vote.type != typeOfVote:
+                    # Adjust upvotes based on the existing vote
+                    if existing_vote.type == 'UP':
+                        solution.upvotes -= 1
+                        studentOfSolution.noOfUpvotes -= 1
+                    elif existing_vote.type == 'DOWN':
+                        solution.upvotes += 1
+                        studentOfSolution.noOfUpvotes += 1
+                    
+                    # Adjust upvotes based on the new vote
+                    if typeOfVote == 'UP':
+                        solution.upvotes += 1
+                        studentOfSolution.noOfUpvotes += 1
+                    elif typeOfVote == 'DOWN':
+                        solution.upvotes -= 1
+                        studentOfSolution.noOfUpvotes -= 1
+                    
+                    # Update the existing vote type
+                    existing_vote.type = typeOfVote
+                    existing_vote.save()
+                # No change if vote type is the same
+
+            else:
+                # Create a new vote if no existing vote
+                if typeOfVote == 'UP':
+                    solution.upvotes += 1
+                    studentOfSolution.noOfUpvotes += 1
+                elif typeOfVote == 'DOWN':
+                    solution.upvotes -= 1
+                    studentOfSolution.noOfUpvotes -= 1
+                
+                # Serialize the solution object using the PostVoteSerializer
+                serializer = PostVoteSerializer(data={'type': typeOfVote})
+                if serializer.is_valid():
+                    serializer.save(votedBy=student, solution=solution)
+                else:
+                    return Response({
+                        'status': 400,
+                        'errors': serializer.errors
+                    })
+            
+            # Save changes to solution and student of the solution
+            solution.save()
+            studentOfSolution.save()
+
+            return Response({
+                'status': 200,
+                'message': 'The vote is successfully updated.'
+            })
+            
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while updating vote data',
+                'error': str(e)
+            })
