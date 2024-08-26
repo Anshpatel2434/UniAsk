@@ -530,3 +530,38 @@ class UpdateVoteView(APIView):
                 'message': 'Error while updating vote data',
                 'error': str(e)
             })
+
+class GetStudentByIdView(APIView):
+    
+    permission_classes = [AllowAny]  # Ensure the user is authenticated
+
+    def get(self, request, student_id, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+
+            student = Student.objects.filter(id=student_id).first()
+
+            if student:
+                # Serialize the student data
+                serializer = StudentIdSerializer(student)
+                return Response({
+                    'status': 200,
+                    'student': serializer.data
+                })
+            else:
+                return Response({
+                    'status': 404,
+                    'message': 'User not found'
+                })
+        except Exception as e:
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching user data',
+                'error': str(e)
+            })

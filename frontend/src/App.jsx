@@ -19,7 +19,7 @@ function App() {
 				<Route path="/signin" element={<Signin />} />
 				<Route path="/postDoubt" element={<PostDoubt />} />
 				<Route path="/reguser" element={<RegisteredUsersPage />} />
-				<Route path="/dashboard" element={<Dashboard />} />
+				<Route path="/dashboard/:student_id" element={<Dashboard />} />
 				<Route path="/doubt/:doubt_id" element={<DoubtPage />} />
 				<Route path="/solution/:solution_id" element={<SolutionInfo />} />
 			</Routes>

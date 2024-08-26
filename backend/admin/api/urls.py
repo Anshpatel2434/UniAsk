@@ -7,6 +7,7 @@ urlpatterns = [
     path("student/signup", StudentSignupView.as_view()),
     path("student/signin", StudentSigninView.as_view()),
     path("student/getStudent", GetStudentView.as_view()),
+    path("student/getStudentById/<int:student_id>", GetStudentByIdView.as_view()),
     path("doubt/postDoubt" , PostDoubtView.as_view()),
     path("doubt/getDoubt/<int:doubt_id>" , GetDoubtView.as_view()),
     path('solution/postSolution/<int:doubt_id>', PostSolutionView.as_view()),
