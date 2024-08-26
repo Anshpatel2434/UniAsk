@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Sidebar from "./components/Sidebar";
 import PostDoubt from "./pages/PostDoubt";
 import RegisteredUsersPage from "./pages/RegUsers";
+import DoubtPage from "./pages/DoubtPage";
+import SolutionInfo from "./components/SolutionInfo";
 
 function App() {
 	return (
@@ -15,8 +17,10 @@ function App() {
 				<Route path="/signup" element={<Signup />} />
 				<Route path="/signin" element={<Signin />} />
 				<Route path="/postDoubt" element={<PostDoubt />} />
-        		<Route path="/sidebar" element={<Sidebar />} />
-        		<Route path="/reguser" element={<RegisteredUsersPage />} />
+        <Route path="/reguser" element={<RegisteredUsersPage />} />
+				<Route path="/sidebar" element={<Sidebar />} />
+				<Route path="/doubt/:doubt_id" element={<DoubtPage />} />
+				<Route path="/solution/:solution_id" element={<SolutionInfo />} />
 			</Routes>
 		</BrowserRouter>
 	);
