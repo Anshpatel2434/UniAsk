@@ -13,7 +13,7 @@ const AllDoubt = () => {
 	const [doubtsArray, setDoubtsArray] = useState([]);
 
 	useEffect(() => {
-		if (!loading) {
+		if (doubts && doubts.length > 0) {
 			setDoubtsArray(doubts);
 			applyFilter();
 			console.log(doubts);
