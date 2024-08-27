@@ -54,8 +54,10 @@ class StudentSignupView(APIView):
                         student.password = make_password(serializer.validated_data.get('password'))
                         student.save(update_fields=['password'])
                         jwt_token = self.create_jwt(student)
-                        return Response({'jwt': jwt_token, 
-                                         'student': student.name,
+                        return Response({
+                            'status': 200,
+                            'jwt': jwt_token, 
+                            'student': student.name,
                             'enr_no': student.enr_no,
                             'dep':student.dep,
                             'branch':student.branch,

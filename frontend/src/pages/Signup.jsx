@@ -79,7 +79,7 @@ const Signup = () => {
 				enr_no: userInput.enr_no || "1", // Ensure correct type
 				password: userInput.password,
 			});
-			if (!res.jwt) {
+			if (res.status !== 200) {
 				toast((t) => (
 					<div className="flex justify-between bg-red-700 text-white p-4 rounded-md shadow-lg -mx-5 -my-3">
 						<span className="font-bold">{res.data.message}</span>
@@ -93,7 +93,7 @@ const Signup = () => {
 						</button>
 					</div>
 				));
-			} else if (res) {
+			} else if (res.status === 200) {
 				const jwt = res.data.jwt;
 				localStorage.setItem("token", jwt);
 				toast("YOU HAVE SUCCESSFULLY LOGGED IN!", {
