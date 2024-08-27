@@ -1,14 +1,14 @@
 import React, { useState, useContext } from "react";
 import Sidebar from "../components/Sidebar";
 import UserTable from "../components/UserTable"
-import { AppContext } from "../context/AppContext";
 import Pagination from "../components/Pagination";
 
 const RegisteredUsersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOption, setFilterOption] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const { isOpen } = useContext(AppContext);
+  const [isChangingPage, setIsChangingPage] = useState(false);
+
   const users = [                       // Change the objects used here to the ones we call from database
     ...[...Array(50)].map((_, index) => ({
       id: index + 6,
@@ -16,6 +16,7 @@ const RegisteredUsersPage = () => {
       enroll: `${22002171210000 + index + 1}`,
       dep: ["CSE", "CE", "AIML", "IT", "CST"][Math.floor(Math.random() * 5)],
       yeardiv: "SY",                  //no need to change this
+      status:['online','offline'][Math.floor(Math.random()*2)]
     })),
   ];
   const filteredUsers = users.filter((user) => {
@@ -36,35 +37,34 @@ const RegisteredUsersPage = () => {
   const endIndex = startIndex + usersPerPage;
   const currentUsers = filteredUsers.slice(startIndex, endIndex);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    // Scroll to top of the page
-    window.scrollTo(0, 0);
-  };
 
+  const handlePageChange = (pageNumber) => {
+    setIsChangingPage(true);
+    setTimeout(() => {
+      setCurrentPage(pageNumber);
+      setIsChangingPage(false);
+      window.scrollTo(0, 0);
+    }, 300); // This should match the transition duration in UserTable
+  };
   return (
-    <div className="flex min-h-screen bg-[#1d1b31]">
+    <div className="flex flex-col sm:flex-row min-h-screen bg-gray-800">
       <Sidebar />
     
-      <div
-        className={`flex-1 p-8 transition-all duration-500 ${
-          isOpen ? "ml-[250px]" : "ml-[78px]"
-        }`}
-      >
-        <div className="max-w-4xl mx-auto bg-[#11101d] shadow-2xl rounded-lg border border-[#2e2c4e] p-8">
-          <h1 className="text-3xl font-bold mb-6 text-center text-white">
+      <div className='flex-1 p-4 sm:p-8'>
+        <div className="max-w-72 sm:max-w-2xl ml-20 sm:mx-20 lg:mx-auto bg-gray-900 shadow-2xl rounded-lg border border-[#2e2c4e] p-4 sm:p-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-white">
             Registered Users
           </h1>
-          <div className="mb-6 flex flex-col sm:flex-row gap-4">
+          <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-4">
             <input
               type="text" 
               placeholder="Search users..."
-              className="flex-grow px-3 py-2 border-2 border-[#2e2c4e] rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e4b73] bg-[#1d1b31] text-white"
+              className="w-full sm:flex-grow px-3 py-2 border-2 border-[#2e2c4e] rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e4b73] bg-[#1d1b31] text-white"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <select
-              className="px-2 py-2 border-2 border-[#2e2c4e] rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e4b73] bg-[#1d1b31] text-white"
+              className="w-full sm:w-auto px-2 py-2 border-2 border-[#2e2c4e] rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e4b73] bg-[#1d1b31] text-white"
               value={filterOption}
               onChange={(e) => setFilterOption(e.target.value)}
             >
@@ -77,7 +77,7 @@ const RegisteredUsersPage = () => {
             </select>
           </div>
 
-          <UserTable users={currentUsers} />
+          <UserTable users={currentUsers} isChangingPage={isChangingPage} />
 
           {filteredUsers.length === 0 ? (
             <p className="text-center text-gray-400 mt-4">

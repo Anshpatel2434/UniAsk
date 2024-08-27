@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import RegisteredUsersPage from "./pages/RegUsers";
 import DoubtPage from "./pages/DoubtPage";
 import SolutionInfo from "./components/SolutionInfo";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
 	return (
@@ -19,9 +20,11 @@ function App() {
 				<Route path="/signin" element={<Signin />} />
 				<Route path="/postDoubt" element={<PostDoubt />} />
 				<Route path="/reguser" element={<RegisteredUsersPage />} />
+				<Route path="/aboutUs" element={<AboutUs />} />
 				<Route path="/dashboard" element={<Dashboard />} />
 				<Route path="/doubt/:doubt_id" element={<DoubtPage />} />
 				<Route path="/solution/:solution_id" element={<SolutionInfo />} />
+				
 			</Routes>
 		</BrowserRouter>
 	);
