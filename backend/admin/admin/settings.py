@@ -28,7 +28,7 @@ SECRET_KEY = 'hehechatwitheveryone'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.verce.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['uni-ask-backend.vercel.app', 'localhost', '127.0.0.1']
 
 
 
