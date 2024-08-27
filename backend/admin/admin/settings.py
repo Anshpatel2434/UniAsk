@@ -26,9 +26,9 @@ SECRET_KEY = 'hehechatwitheveryone'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['Anshhpatel2434.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.verce.app', 'localhost', '127.0.0.1']
 
 
 
