@@ -54,8 +54,10 @@ class StudentSignupView(APIView):
                         student.password = make_password(serializer.validated_data.get('password'))
                         student.save(update_fields=['password'])
                         jwt_token = self.create_jwt(student)
-                        return Response({'jwt': jwt_token, 
-                                         'student': student.name,
+                        return Response({
+                            'status': 200,
+                            'jwt': jwt_token, 
+                            'student': student.name,
                             'enr_no': student.enr_no,
                             'dep':student.dep,
                             'branch':student.branch,
@@ -528,5 +530,78 @@ class UpdateVoteView(APIView):
             return Response({
                 'status': 500,
                 'message': 'Error while updating vote data',
+                'error': str(e)
+            })
+
+class GetStudentByIdView(APIView):
+    
+    permission_classes = [AllowAny]  # Ensure the user is authenticated
+
+    def get(self, request, student_id, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+
+            student = Student.objects.filter(id=student_id).first()
+
+            if student:
+                # Serialize the student data
+                serializer = StudentIdSerializer(student)
+                return Response({
+                    'status': 200,
+                    'student': serializer.data
+                })
+            else:
+                return Response({
+                    'status': 404,
+                    'message': 'User not found'
+                })
+        except Exception as e:
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching user data',
+                'error': str(e)
+            })
+
+class GetAllDoubtView(APIView):
+    permission_classes = [AllowAny]  # No authentication required for this view
+
+    def get(self, request, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+
+            # Fetch the doubt object
+            doubt = Doubt.objects.all()
+
+            if doubt:
+                # Serialize the doubt object using the GetDoubtSerializer
+                serializer = DoubtSerializer(doubt, many=True)
+                return Response({
+                    'status': 200,
+                    'doubts': serializer.data  # Return serialized data
+                })
+            
+            # If doubt is not found 
+            return Response({
+                'status': 404,
+                'message': 'Doubts not found'
+            })
+            
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
                 'error': str(e)
             })

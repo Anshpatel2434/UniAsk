@@ -8,10 +8,14 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ('id', 'dep', 'branch', 'roll_no', 'enr_no', 'batch', 'name', 'noOfDoubts', 'noOfSolutions', 'noOfUpvotes')
 
 class DoubtSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Doubt
-        fields = ('id', 'subject', 'doubt', 'postedBy', 'postedOn', 'doubtFor')
+        fields = ['id', 'subject', 'doubt', 'postedBy', 'postedOn', 'doubtFor']
+
+class SolutionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Solution
+        fields = ['id', 'doubt', 'solution', 'postedBy', 'postedOn', 'upvotes']
 
 class CreateStudentSerializer(serializers.ModelSerializer):
 
@@ -103,3 +107,11 @@ class PostSolutionSerializer(serializers.ModelSerializer):
                 })
         
         return attrs
+    
+class StudentIdSerializer(serializers.ModelSerializer):
+    doubts = DoubtSerializer(many=True, read_only=True)
+    solutions = SolutionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Student
+        fields = ['id', 'dep', 'branch', 'roll_no', 'enr_no', 'batch', 'name', 'noOfDoubts', 'noOfSolutions', 'noOfUpvotes', 'doubts', 'solutions']

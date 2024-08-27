@@ -8,7 +8,6 @@ const RegisteredUsersPage = () => {
   const [filterOption, setFilterOption] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [isChangingPage, setIsChangingPage] = useState(false);
-
   const users = [                       // Change the objects used here to the ones we call from database
     ...[...Array(50)].map((_, index) => ({
       id: index + 6,
@@ -16,7 +15,6 @@ const RegisteredUsersPage = () => {
       enroll: `${22002171210000 + index + 1}`,
       dep: ["CSE", "CE", "AIML", "IT", "CST"][Math.floor(Math.random() * 5)],
       yeardiv: "SY",                  //no need to change this
-      status:['online','offline'][Math.floor(Math.random()*2)]
     })),
   ];
   const filteredUsers = users.filter((user) => {

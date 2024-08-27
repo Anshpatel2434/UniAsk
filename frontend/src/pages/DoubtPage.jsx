@@ -22,6 +22,7 @@ const DoubtPage = () => {
 		console.log(doubt);
 		studentDetails = doubt.postedBy;
 		solutions = doubt.solutions;
+		solutions.sort((a, b) => b.upvotes - a.upvotes);
 		formattedDate = new Date(doubt.postedOn).toLocaleDateString();
 	}
 
