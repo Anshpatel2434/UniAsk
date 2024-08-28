@@ -32,7 +32,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['uni-ask-backend.vercel.app', 'uni-ask-backend-h515074el-ansh-patels-projects-9f5b2e99.vercel.app', 'uni-ask-backend-6d43rv1tu-ansh-patels-projects-9f5b2e99.vercel.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['uni-ask-backend.vercel.app', 'uni-ask-backend-h515074el-ansh-patels-projects-9f5b2e99.vercel.app', 'uni-ask-backend-6d43rv1tu-ansh-patels-projects-9f5b2e99.vercel.app', 'localhost', '127.0.0.1', 'uniask-production.up.railway.app']
 
 
 
