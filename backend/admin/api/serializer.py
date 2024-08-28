@@ -115,3 +115,29 @@ class StudentIdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id', 'dep', 'branch', 'roll_no', 'enr_no', 'batch', 'name', 'noOfDoubts', 'noOfSolutions', 'noOfUpvotes', 'doubts', 'solutions']
+
+class CreateChatGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatGroup
+        fields = ['name']        
+
+class MessageSerializer(serializers.ModelSerializer):
+    sender = StudentSerializer(read_only=True)
+    class Meta:
+        model = Message
+        fields = ['message', 'sender']        
+
+class CreateMessageSerializer(serializers.ModelSerializer):
+    sender = StudentSerializer(read_only=True)
+    chatGroup = serializers.RelatedField(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ['message', 'sender', 'chatGroup']
+
+class GetChatsSerializer(serializers.ModelSerializer):
+    messages = MessageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ChatGroup
+        fields = ['name', 'createdOn', 'messages']        

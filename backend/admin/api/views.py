@@ -605,3 +605,141 @@ class GetAllDoubtView(APIView):
                 'message': 'Error while fetching doubt data',
                 'error': str(e)
             })
+
+class CreateChatGroup(APIView):      
+    def post(self, request, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+            
+            group = ChatGroup.objects.filter(name=request.data.get('name')).first()
+
+            if group:
+                return Response({
+                    'status': 400,
+                    'message': 'Group already exists'
+                })
+            
+            serializer = CreateChatGroupSerializer(data={
+                'name': request.data.get('name'),
+            })
+
+            try:
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response({
+                        'status': 200,
+                        'message': 'The chat group is successfully created'
+                    })
+                else:
+                    return Response({
+                        'status': 400,
+                        'errors': serializer.errors['error'][0]
+                    })
+            except Exception as e:
+                return Response({
+                    'status': 500,
+                    'message': serializer.errors['error'][0]
+                })   
+                
+
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
+                'error': str(e)
+            })      
+
+        
+class PostMessageView(APIView):
+    def post(self, request, chat_name, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+            
+            # Decode token to get user information
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            student = Student.objects.filter(enr_no=payload.get('enr_no')).first()
+            
+            chat_group = ChatGroup.objects.filter(name=chat_name).first()
+
+            if not chat_group:
+                return Response({
+                    'stauts': 404,
+                    'message': 'Chat group not found'
+                })
+            
+            serializer = CreateMessageSerializer(data={
+                'message' : request.data.get('message')
+            })
+
+            try:
+                if serializer.is_valid():
+                    serializer.save(chatGroup=chat_group, sender=student)
+                    return Response({
+                        'status': 200,
+                        'message': 'The message is successfully posted.'
+                    })
+                else:
+                    return Response({
+                        'status': 400,
+                        'errors': serializer.errors['error'][0]
+                    })
+            except Exception as e:
+                return Response({
+                    'status': 500,
+                    'message': serializer.errors['error'][0]
+                })    
+
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
+                'error': str(e)
+            })       
+
+class GetChatsView(APIView):
+
+    def get(self, request, chat_name, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+            
+            chat_group = ChatGroup.objects.filter(name=chat_name).first()
+
+            if not chat_group:
+                return Response({
+                    'stauts': 404,
+                    'message': 'Chat group not found'
+                })
+            
+            serializer = GetChatsSerializer(chat_group)
+            return Response({
+                        'status': 200,
+                        'chats': serializer.data
+                    })
+
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
+                'error': str(e)
+            })             

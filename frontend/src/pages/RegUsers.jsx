@@ -2,22 +2,32 @@ import React, { useState, useContext } from "react";
 import Sidebar from "../components/Sidebar";
 import UserTable from "../components/UserTable";
 import Pagination from "../components/Pagination";
+import { useAllStudents } from "../hooks/useAllStudent";
 
 const RegisteredUsersPage = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterOption, setFilterOption] = useState("all");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [isChangingPage, setIsChangingPage] = useState(false);
-	const users = [
-		// Change the objects used here to the ones we call from database
-		...[...Array(50)].map((_, index) => ({
-			id: index + 6,
-			name: `User ${index + 1}`,
-			enroll: `${22002171210000 + index + 1}`,
-			dep: ["CSE", "CE", "AIML", "IT", "CST"][Math.floor(Math.random() * 5)],
-			yeardiv: "SY", //no need to change this
-		})),
-	];
+	const { students, loading } = useAllStudents();
+	console.log(students);
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+
+	var users = [];
+	if (students) users = students;
+	// const users = [
+	// 	// Change the objects used here to the ones we call from database
+	// 	...[...Array(50)].map((_, index) => ({
+	// 		id: index + 6,
+	// 		name: `User ${index + 1}`,
+	// 		enroll: `${22002171210000 + index + 1}`,
+	// 		dep: ["CSE", "CE", "AIML", "IT", "CST"][Math.floor(Math.random() * 5)],
+	// 		yeardiv: "SY", //no need to change this
+	// 	})),
+	// ];
 	const filteredUsers = users.filter((user) => {
 		const matchesSearch = user.name
 			.toLowerCase()

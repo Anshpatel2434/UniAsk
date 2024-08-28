@@ -41,4 +41,16 @@ class Vote(models.Model):
     type = models.CharField(max_length=5)
     solution = models.ForeignKey(Solution, on_delete=models.CASCADE, related_name='votes')
     votedBy = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='votes')
-        
+
+class ChatGroup(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    createdOn = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return self.name
+
+
+class Message(models.Model):
+    chatGroup = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='messages')
+    message = models.CharField(max_length=1000)

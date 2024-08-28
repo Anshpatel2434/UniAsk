@@ -14,4 +14,7 @@ urlpatterns = [
     path('solution/postSolution/<int:doubt_id>', PostSolutionView.as_view()),
     path('solution/getSolution/<int:solution_id>', GetSolutionView.as_view()),
     path('vote/postVote', UpdateVoteView.as_view()),
+    path('chat/createChatGroup', CreateChatGroup.as_view()),
+    path('chat/<str:chat_name>/postMessage', PostMessageView.as_view()),
+    path('chat/getChats/<str:chat_name>', GetChatsView.as_view()),
 ]

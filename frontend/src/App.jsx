@@ -3,14 +3,13 @@ import "./App.css";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Home from "./pages/Home";
-import Sidebar from "./components/Sidebar";
 import PostDoubt from "./pages/PostDoubt";
 import Dashboard from "./pages/Dashboard";
 import RegisteredUsersPage from "./pages/RegUsers";
 import DoubtPage from "./pages/DoubtPage";
 import SolutionInfo from "./components/SolutionInfo";
 import AllDoubt from "./pages/AllDoubt";
-import AboutUs from "./pages/AboutUs";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
 	return (
@@ -21,12 +20,11 @@ function App() {
 				<Route path="/signin" element={<Signin />} />
 				<Route path="/postDoubt" element={<PostDoubt />} />
 				<Route path="/reguser" element={<RegisteredUsersPage />} />
-				<Route path="/aboutUs" element={<AboutUs />} />
 				<Route path="/dashboard/:student_id" element={<Dashboard />} />
 				<Route path="/doubt/:doubt_id" element={<DoubtPage />} />
 				<Route path="/doubts" element={<AllDoubt />} />
 				<Route path="/solution/:solution_id" element={<SolutionInfo />} />
-				
+				<Route path="/chat/:chat_name" element={<ChatPage />} />
 			</Routes>
 		</BrowserRouter>
 	);

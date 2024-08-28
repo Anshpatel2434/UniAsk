@@ -90,6 +90,15 @@ const DoubtPage = () => {
 									{read ? "Read Less" : "Read More"}
 								</span>
 							</div>
+							{/* New Button for Chatroom Discussion */}
+							<div className="mt-2">
+								<button
+									className="bg-blue-500 text-white py-1 px-3 rounded-md text-xs sm:text-sm hover:bg-blue-600 transition"
+									onClick={() => navigate(`/chat/doubt_${doubt_id}`)}
+								>
+									Go to Chatroom Discussion
+								</button>
+							</div>
 						</div>
 					)}
 				</div>
