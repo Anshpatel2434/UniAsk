@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
-import ansh from "../assets/anshpatel.jpeg";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 
@@ -84,7 +83,12 @@ const Sidebar = () => {
 				</li>
 				<li className="profile">
 					<div className="profile-details">
-						<img src={ansh} alt="profileImg" />
+						<div className="flex items-center mb-4">
+							<div className="h-11 w-11 rounded-md mr-2 flex items-center justify-center bg-black text-white text-xl font-bold shadow-glow">
+								{user.name.charAt(0)}
+							</div>
+						</div>
+
 						<div className="name_job">
 							<div className="name">{user.name}</div>
 							<div className="job">

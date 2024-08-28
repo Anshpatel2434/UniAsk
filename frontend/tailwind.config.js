@@ -3,10 +3,13 @@ export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		extend: {
-			screens:{
-				'smd':'410px',
-				'lmd':'1200px',
-			}
+			screens: {
+				smd: "410px",
+				lmd: "1200px",
+			},
+			boxShadow: {
+				glow: "0 0 10px rgba(255, 255, 255, 0.5)",
+			},
 		},
 	},
 	plugins: [],
