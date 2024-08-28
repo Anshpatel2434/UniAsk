@@ -1,8 +1,7 @@
-
-const UserTable = ({ users }) => {
-    const headStyle =
-      "px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider";
-    const cellStyle = "px-4 py-2 whitespace-nowrap";
+const UserTable = ({ users, isChangingPage }) => {
+  const headStyle =
+    "px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider";
+  const cellStyle = "px-2 sm:px-4 py-2 whitespace-nowrap text-sm";
     const checkDep = (dep) => {
       if (dep == "CSE" || dep == "AIML") {
         return 2;
@@ -12,26 +11,32 @@ const UserTable = ({ users }) => {
         return 3;
       }
     };
-    return (
-      <div className="overflow-x-auto bg-[#11101d] rounded-lg border border-[#2e2c4e]">
-        <table className="min-w-full">
-          <thead className="bg-[#1d1b31]">
+    const checkStatus=(stat)=>{
+        if (stat=='online') return true;
+        return false;
+   }
+  return (
+    <div className="overflow-x-auto bg-gray-900 rounded-lg border border-[#2e2c4e]">
+      <table className="min-w-full table-auto">
+        <thead className="bg-[#1d1b31]">
             <tr>
               <th className={`${headStyle}`}>ID</th>
               <th className={`${headStyle}`}>Name</th>
-              <th className={`${headStyle}`}>Enrollment No</th>
-              <th className={`${headStyle}`}>Department</th>
-              <th className={`${headStyle}`}>Year-Div</th>
+              <th className={`${headStyle} hidden smd:table-cell`}>Active Status</th>
+              <th className={`${headStyle} hidden sm:table-cell`}>Enrollment No</th>
+              <th className={`${headStyle} hidden md:table-cell`}>Department</th>
+              <th className={`${headStyle} hidden lg:table-cell`}>Year-Div</th>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-[#2e2c4e]">
-            {users.map((user,index) => (
-              <tr key={user.id} className="text-white border-[#2e2c4e] border-1 hover:bg-[#2e2c4e] transition-colors duration-500 hover:cursor-pointer">
-                <td className={`${cellStyle}`}>{index+1}</td>
+            </thead>
+        <tbody className={`divide-y divide-[#2e2c4e] transition-opacity duration-300 ${isChangingPage ? 'opacity-0' : 'opacity-100'}`}>
+          {users.map((user, index) => (
+            <tr key={user.id} className="text-white border-[#2e2c4e] border-1 hover:bg-[#2e2c4e] transition-colors duration-500 hover:cursor-pointer">
+                <td className={`${cellStyle}`}>{index + 1}</td>
                 <td className={`${cellStyle}`}>{user.name}</td>
-                <td className={`${cellStyle}`}>{user.enroll}</td>
-                <td className={`${cellStyle}`}>{user.dep}</td>
-                <td className={`${cellStyle}`}>
+                <td className={`${cellStyle} hidden smd:table-cell ${checkStatus(user.status) ?'text-green-400':'text-gray-400'}`} >{user.status}</td>
+                <td className={`${cellStyle} hidden sm:table-cell`}>{user.enroll}</td>
+                <td className={`${cellStyle} hidden md:table-cell`}>{user.dep}</td>
+                <td className={`${cellStyle} hidden lg:table-cell`}>
                   {user.yeardiv}-{checkDep(user.dep)}
                 </td>
               </tr>
@@ -41,4 +46,4 @@ const UserTable = ({ users }) => {
       </div>
     );
   };
-export default UserTable
+export default UserTable;

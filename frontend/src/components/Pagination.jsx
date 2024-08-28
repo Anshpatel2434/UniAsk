@@ -22,11 +22,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     }
   
     return (
-      <div className="flex justify-center mt-4 space-x-2">
+      <div className="flex justify-center mt-4 space-x-1 sm:space-x-2 text-sm sm:text-base">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-2 sm:px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           &lt;
         </button>
@@ -34,12 +34,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           <>
             <button
               onClick={() => onPageChange(1)}
-              className="px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e]"
+              className="px-2 sm:px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e]"
             >
               1
             </button>
             {startPage > 2 && (
-              <span className="px-3 py-1 text-gray-400">...</span>
+              <span className="px-2 sm:px-3 py-1 text-gray-400">...</span>
             )}
           </>
         )}
@@ -47,7 +47,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           <button
             key={number}
             onClick={() => onPageChange(number)}
-            className={`px-3 py-1 rounded ${
+            className={`px-2 sm:px-3 py-1 rounded ${
               currentPage === number
                 ? "bg-[#4e4b73] text-white"
                 : "bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e]"
@@ -59,11 +59,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         {endPage < totalPages && (
           <>
             {endPage < totalPages - 1 && (
-              <span className="px-3 py-1 text-gray-400">...</span>
+              <span className="px-2 sm:px-3 py-1 text-gray-400">...</span>
             )}
             <button
               onClick={() => onPageChange(totalPages)}
-              className="px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e]"
+              className="px-2 sm:px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e]"
             >
               {totalPages}
             </button>
@@ -72,7 +72,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-2 sm:px-3 py-1 rounded bg-[#1d1b31] text-gray-400 hover:bg-[#2e2c4e] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           &gt;
         </button>

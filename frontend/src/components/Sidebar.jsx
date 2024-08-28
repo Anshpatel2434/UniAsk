@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import ansh from "../assets/anshpatel.jpeg";
-import "./Sidebar.css"; // Assuming you have the same CSS file
+import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
