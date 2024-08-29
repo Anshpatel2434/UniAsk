@@ -656,7 +656,6 @@ class CreateChatGroup(APIView):
                 'error': str(e)
             })      
 
-        
 class PostMessageView(APIView):
     def post(self, request, chat_name, format=None):
         try:

@@ -10,7 +10,7 @@ const ChatPage = () => {
 	const { user } = useContext(AppContext);
 	const { chat_name } = useParams();
 	const navigate = useNavigate();
-	const BACKEND_URL = import.meta.env.VITE_DATABASE_URL;
+	const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL;
 	const [currentChats, setCurrentChats] = useState([]);
 	const [message, setMessage] = useState("");
 	const [ws, setWs] = useState(null);
@@ -37,7 +37,7 @@ const ChatPage = () => {
 	useEffect(() => {
 		if (isCreated) {
 			const websocket = new WebSocket(
-				`ws://127.0.0.1:8000/ws/chat/${chat_name}/`
+				`wss://${WEBSOCKET_URL}/ws/chat/${chat_name}/`
 			);
 
 			websocket.onopen = () => {
@@ -118,7 +118,7 @@ const ChatPage = () => {
 			<Sidebar />
 			<div className="flex-1 flex flex-col bg-gray-900 text-white min-h-screen pl-[5rem] sm:pl-[5rem]">
 				{/* Header Section */}
-				<div className="fixed top-0 left-[5rem] sm:left-[5rem] right-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md flex items-center">
+				<div className="fixed top-0 left-[5rem] sm:left-[5rem] right-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md flex items-center hover:cursor-pointer">
 					<button
 						onClick={() => navigate(-1)}
 						className="mr-2 p-2 bg-blue-500 text-white rounded-md text-sm"
