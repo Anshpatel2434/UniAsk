@@ -11,6 +11,7 @@ const ChatPage = () => {
 	const { chat_name } = useParams();
 	const navigate = useNavigate();
 	const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL;
+	const BACKEND_URL = import.meta.env.VITE_DATABASE_URL;
 	const [currentChats, setCurrentChats] = useState([]);
 	const [message, setMessage] = useState("");
 	const [ws, setWs] = useState(null);
