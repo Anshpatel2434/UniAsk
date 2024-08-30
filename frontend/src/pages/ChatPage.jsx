@@ -117,7 +117,7 @@ const ChatPage = () => {
 	return (
 		<div className="flex">
 			<Sidebar />
-			<div className="flex-1 flex flex-col bg-gray-900 text-white min-h-screen pl-[5rem] sm:pl-[5rem]">
+			<div className="flex-1 flex flex-col bg-gray-900  text-white min-h-screen pl-[5rem] sm:pl-[5rem]">
 				{/* Header Section */}
 				<div className="fixed top-0 left-[5rem] sm:left-[5rem] right-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md flex items-center hover:cursor-pointer">
 					<button
@@ -134,7 +134,7 @@ const ChatPage = () => {
 				{/* Chat Messages Section */}
 				<div
 					ref={messagesContainerRef}
-					className="flex-1 mt-[3rem] sm:mt-[4rem] mb-[4rem] sm:mb-[5rem] overflow-y-auto p-[0.5rem] sm:p-[1rem]"
+					className="flex-1 mt-[3rem] sm:mt-[4rem] mb-[4rem] sm:mb-[5rem] overflow-y-scroll no-scrollbar p-[0.5rem] sm:p-[1rem]"
 				>
 					{loading && !user ? (
 						<div className="text-center">Loading...</div>
