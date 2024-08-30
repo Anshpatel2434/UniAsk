@@ -6,6 +6,15 @@ import { AppContext } from "../context/AppContext";
 import Sidebar from "../components/Sidebar";
 import { useCreateGroup } from "../hooks/useCreateGroup";
 
+// Function to generate a color based on numeric user ID
+const generateColor = (id) => {
+	const numericId = parseInt(id, 10);
+	const hue = numericId % 360;
+	const saturation = 70 + (numericId % 30); // 70-100%
+	const lightness = 45 + (numericId % 10); // 45-55%
+	return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+};
+
 const ChatPage = () => {
 	const { user } = useContext(AppContext);
 	const { chat_name } = useParams();
@@ -15,25 +24,30 @@ const ChatPage = () => {
 	const [currentChats, setCurrentChats] = useState([]);
 	const [message, setMessage] = useState("");
 	const [ws, setWs] = useState(null);
-	const messagesContainerRef = useRef(null);
+	const messagesEndRef = useRef(null);
 
 	const { isCreated } = useCreateGroup({ chat_name });
 
 	const { chats, loading } = useChatGroup({ chat_name });
 
 	const scrollToBottom = () => {
-		if (messagesContainerRef.current) {
-			messagesContainerRef.current.scrollTop =
-				messagesContainerRef.current.scrollHeight;
-		}
+		setTimeout(() => {
+			window.scrollTo({
+				top: document.documentElement.scrollHeight,
+				behavior: "smooth",
+			});
+		}, 100);
 	};
 
 	useEffect(() => {
 		if (isCreated && !loading && chats.messages) {
 			setCurrentChats(chats.messages);
-			scrollToBottom();
 		}
 	}, [chats, loading, isCreated]);
+
+	useEffect(() => {
+		scrollToBottom();
+	}, [currentChats]);
 
 	useEffect(() => {
 		if (isCreated) {
@@ -57,7 +71,6 @@ const ChatPage = () => {
 						message: data.message,
 					},
 				]);
-				scrollToBottom();
 			};
 
 			websocket.onclose = () => {
@@ -115,11 +128,11 @@ const ChatPage = () => {
 	}
 
 	return (
-		<div className="flex">
+		<div className="flex flex-col min-h-screen bg-gray-900">
 			<Sidebar />
-			<div className="flex-1 flex flex-col bg-gray-900  text-white min-h-screen pl-[5rem] sm:pl-[5rem]">
+			<div className="flex-1 flex flex-col pl-[5rem] sm:pl-[5rem]">
 				{/* Header Section */}
-				<div className="fixed top-0 left-[5rem] sm:left-[5rem] right-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md flex items-center hover:cursor-pointer">
+				<div className="sticky top-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md flex items-center hover:cursor-pointer">
 					<button
 						onClick={() => navigate(-1)}
 						className="mr-2 p-2 bg-blue-500 text-white rounded-md text-sm"
@@ -132,30 +145,39 @@ const ChatPage = () => {
 				</div>
 
 				{/* Chat Messages Section */}
-				<div
-					ref={messagesContainerRef}
-					className="flex-1 mt-[3rem] sm:mt-[4rem] mb-[4rem] sm:mb-[5rem] overflow-y-scroll no-scrollbar p-[0.5rem] sm:p-[1rem]"
-				>
+				<div className="flex-1 p-[0.5rem] sm:p-[1rem] overflow-y-auto">
 					{loading && !user ? (
-						<div className="text-center">Loading...</div>
+						<div className="text-center text-white">Loading...</div>
 					) : (
 						<div className="space-y-3 sm:space-y-4 flex flex-col">
 							{currentChats.length > 0 ? (
 								currentChats.map((chat, index) => (
 									<div
 										key={index}
-										className={`flex ${
-											chat.sender.id === user.id
-												? "justify-end"
-												: "justify-start"
+										className={`flex flex-col gap-2 ${
+											chat.sender.id === user.id ? "items-end" : "items-start"
 										}`}
 									>
+										<span className="relative inline-block group">
+											<span
+												className="hover:text-white transition-colors duration-300 ease-in-out text-gray-400 text-xs hover:cursor-pointer"
+												onClick={() => navigate(`/dashboard/${chat.sender.id}`)}
+											>
+												{chat.sender.name}
+											</span>
+											<span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
+										</span>
 										<div
-											className={`flex items-start space-x-2 max-w-[75%] ${
+											className={`flex items-center gap-3 max-w-[75%] ${
 												chat.sender.id === user.id ? "flex-row-reverse" : ""
 											}`}
 										>
-											<div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+											<div
+												className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+												style={{
+													backgroundColor: generateColor(chat.sender.id),
+												}}
+											>
 												{chat.sender.name[0].toUpperCase()}
 											</div>
 											<div
@@ -171,14 +193,17 @@ const ChatPage = () => {
 									</div>
 								))
 							) : (
-								<div className="text-center text-sm">No messages yet.</div>
+								<div className="text-center text-sm text-white">
+									No messages yet.
+								</div>
 							)}
+							<div ref={messagesEndRef} />
 						</div>
 					)}
 				</div>
 
 				{/* Message Input Section */}
-				<div className="fixed bottom-0 left-[5rem] sm:left-[5rem] right-0 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md">
+				<div className="sticky bottom-0 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md">
 					<form onSubmit={sendMessage} className="flex items-center space-x-2">
 						<input
 							type="text"
