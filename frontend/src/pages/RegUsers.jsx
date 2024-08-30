@@ -57,7 +57,7 @@ const RegisteredUsersPage = () => {
     }, 300); // This should match the transition duration in UserTable
   };
   return (
-    <div className="flex flex-col h-screen bg-gray-800">
+    <div className="flex flex-col min-h-screen bg-gray-800">
       <Sidebar />
 
       <div className="flex-1 p-4 sm:p-8">
