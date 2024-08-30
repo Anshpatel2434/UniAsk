@@ -17,6 +17,7 @@ const AppContextProvider = ({ children }) => {
 		noOfDoubts: "",
 		noOfSolutions: "",
 		noOfUpvotes: "",
+		gender: "",
 	});
 	const [loggedIn, setLoggedIn] = useState(false);
 
@@ -42,6 +43,7 @@ const AppContextProvider = ({ children }) => {
 				user.noOfDoubts = temp.noOfDoubts;
 				user.noOfSolutions = temp.noOfSolutions;
 				user.noOfUpvotes = temp.noOfUpvotes;
+				user.gender = temp.gender;
 				setUser(user);
 			}
 		} catch (error) {

@@ -114,7 +114,7 @@ class StudentIdSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['id', 'dep', 'branch', 'roll_no', 'enr_no', 'batch', 'name', 'noOfDoubts', 'noOfSolutions', 'noOfUpvotes', 'doubts', 'solutions']
+        fields = ['id', 'dep', 'branch', 'roll_no', 'enr_no', 'batch', 'name', 'noOfDoubts', 'noOfSolutions', 'noOfUpvotes', 'doubts', 'solutions', 'gender']
 
 class CreateChatGroupSerializer(serializers.ModelSerializer):
     class Meta:

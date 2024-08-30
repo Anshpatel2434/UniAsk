@@ -13,6 +13,7 @@ class Student(models.Model):
     noOfDoubts = models.BigIntegerField()
     noOfSolutions = models.BigIntegerField()
     noOfUpvotes = models.BigIntegerField()
+    gender = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return self.name

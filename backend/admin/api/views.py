@@ -172,7 +172,8 @@ class GetStudentView(APIView):
                     'name': student.name,
                     'noOfDoubts':student.noOfDoubts,
                     'noOfSolutions':student.noOfSolutions,
-                    'noOfUpvotes':student.noOfUpvotes
+                    'noOfUpvotes':student.noOfUpvotes,
+                    'gender' : student.gender
                 }
                 return Response({
                     'status': 200,
@@ -742,3 +743,41 @@ class GetChatsView(APIView):
                 'message': 'Error while fetching doubt data',
                 'error': str(e)
             })             
+        
+class SetGender(APIView):
+    def post(self, request, format=None):
+        try:
+            # Extract token from the Authorization header
+            token = request.headers.get('Authorization', '')
+            if not token:
+                return Response({
+                    'status': 401,
+                    'message': 'No token provided'
+                })
+            gender = request.data.get('gender')
+            
+            # Decode token to get user information
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            student = Student.objects.filter(enr_no=payload.get('enr_no')).first()
+
+            if gender != 'male' and gender != 'female':
+                return Response({
+                    'status' : 404,
+                    'message' : 'Invalid gender'
+                })
+            
+            
+            student.gender = gender
+            student.save()
+            return Response({
+                'status' : 200,
+                'message' : 'gender successfully updated'
+            })
+
+        except Exception as e:
+            # Handle any other exceptions
+            return Response({
+                'status': 500,
+                'message': 'Error while fetching doubt data',
+                'error': str(e)
+            })       

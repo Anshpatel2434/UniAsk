@@ -142,6 +142,8 @@ const Dashboard = () => {
 								branch={data.branch}
 								batch={data.batch}
 								upvotes={data.noOfUpvotes}
+								gender={data.gender}
+								student_id={student_id}
 							/>
 						</div>
 
