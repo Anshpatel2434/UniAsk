@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const UserTable = ({ users, isChangingPage }) => {
 	const headStyle =
 		"px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider";
@@ -11,6 +13,7 @@ const UserTable = ({ users, isChangingPage }) => {
 			return 3;
 		}
 	};
+	const navigate=useNavigate()
 	const checkStatus = (stat) => {
 		if (stat == "online") return true;
 		return false;
@@ -39,6 +42,9 @@ const UserTable = ({ users, isChangingPage }) => {
 				>
 					{users.map((user, index) => (
 						<tr
+							onClick={()=>{
+								navigate(`/dashboard/${user.id}`)
+							}}
 							key={user.id}
 							className="text-white border-[#2e2c4e] border-1 hover:bg-[#2e2c4e] transition-colors duration-500 hover:cursor-pointer"
 						>
