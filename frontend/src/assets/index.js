@@ -1,9 +1,6 @@
-import image1 from './classDoubt.png'
-import image2 from './femaleDoubt.png'
-import image3 from './studentD.png'
-import image4 from './studentDoubt.png'
-import image5 from './studentSolve.png'
-import image6 from './teacherDoubt.png'
+import image1 from './classroom1.jpg'
+import image8 from './class2.jpeg'
+import image7 from './class3.jpg'
 
-const images=[image1,image2,image3,image4,image5,image6]
+const images=[image8,image1,image7]
 export default images;

@@ -34,11 +34,11 @@ const RegisteredUsersPage = () => {
 			.includes(searchTerm.toLowerCase());
 		const matchesFilter =
 			filterOption === "all" ||
-			(filterOption === "CSE" && user.dep == "CSE") ||
-			(filterOption === "CE" && user.dep == "CE") ||
-			(filterOption === "IT" && user.dep == "IT") ||
-			(filterOption === "AIML" && user.dep == "AIML") ||
-			(filterOption === "CST" && user.dep == "CST");
+			(filterOption === "CSE" && user.branch == "CSE") ||
+			(filterOption === "CE" && user.branch == "CE") ||
+			(filterOption === "IT" && user.branch == "IT") ||
+			(filterOption === "AIML" && user.branch == "AIML") ||
+			(filterOption === "CST" && user.branch == "CST");
 		return matchesSearch && matchesFilter;
 	});
 
@@ -57,11 +57,11 @@ const RegisteredUsersPage = () => {
 		}, 300); // This should match the transition duration in UserTable
 	};
 	return (
-		<div className="flex flex-col sm:flex-row min-h-screen bg-gray-800">
+		<div className="flex flex-col h-screen bg-gray-800">
 			<Sidebar />
 
 			<div className="flex-1 p-4 sm:p-8">
-				<div className="max-w-72 sm:max-w-2xl ml-20 sm:mx-20 lg:mx-auto bg-gray-900 shadow-2xl rounded-lg border border-[#2e2c4e] p-4 sm:p-8">
+				<div className="w-9/12 ml-20 sm:mx-20 lg:mx-auto bg-gray-900 shadow-2xl rounded-lg border border-[#2e2c4e] p-4 sm:p-8">
 					<h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-white">
 						Registered Users
 					</h1>
@@ -83,7 +83,6 @@ const RegisteredUsersPage = () => {
 							<option value="CE">CE</option>
 							<option value="IT">IT</option>
 							<option value="CST">CST</option>
-							<option value="AIML">AIML</option>
 						</select>
 					</div>
 

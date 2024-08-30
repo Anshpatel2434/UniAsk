@@ -3,7 +3,7 @@ const UserTable = ({ users, isChangingPage }) => {
 		"px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider";
 	const cellStyle = "px-2 sm:px-4 py-2 whitespace-nowrap text-sm";
 	const checkDep = (dep) => {
-		if (dep == "CSE" || dep == "AIML") {
+		if (dep == "CSE") {
 			return 2;
 		} else if (dep == "CE" || dep == "IT") {
 			return 1;
@@ -16,7 +16,7 @@ const UserTable = ({ users, isChangingPage }) => {
 		return false;
 	};
 	return (
-		<div className="overflow-x-auto bg-gray-900 rounded-lg border border-[#2e2c4e]">
+		<div className="overflow-x-scroll no-scrollbar bg-gray-900 rounded-lg border border-[#2e2c4e]">
 			<table className="min-w-full table-auto">
 				<thead className="bg-[#1d1b31]">
 					<tr>
@@ -55,10 +55,10 @@ const UserTable = ({ users, isChangingPage }) => {
 								{user.enr_no}
 							</td>
 							<td className={`${cellStyle} hidden md:table-cell`}>
-								{user.dep}
+								{user.branch}
 							</td>
 							<td className={`${cellStyle} hidden lg:table-cell`}>
-								{user.yeardiv}-{checkDep(user.dep)}
+								{`SY-${checkDep(user.branch)}`}
 							</td>
 						</tr>
 					))}

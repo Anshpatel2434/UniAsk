@@ -1,15 +1,15 @@
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     const pageNumbers = [];
     let startPage, endPage;
-    if (totalPages <= 5) {
+    if (totalPages <= 4) {
       startPage = 1;
       endPage = totalPages;
     } else {
-      if (currentPage <= 3) {
+      if (currentPage <= 2) {
         startPage = 1;
-        endPage = 5;
+        endPage = 4;
       } else if (currentPage + 2 >= totalPages) {
-        startPage = totalPages - 4;
+        startPage = totalPages - 3;
         endPage = totalPages;
       } else {
         startPage = currentPage - 2;
