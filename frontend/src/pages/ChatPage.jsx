@@ -5,6 +5,7 @@ import { useChatGroup } from "../hooks/useChatGroup";
 import { AppContext } from "../context/AppContext";
 import Sidebar from "../components/Sidebar";
 import { useCreateGroup } from "../hooks/useCreateGroup";
+import Loading from "../components/Loading";
 
 // Function to generate a color based on numeric user ID
 const generateColor = (id) => {
@@ -120,11 +121,7 @@ const ChatPage = () => {
 	};
 
 	if (!isCreated) {
-		return (
-			<div className="flex items-center justify-center h-screen bg-gray-900 text-white">
-				<p>This chat group does not exist or is still being created.</p>
-			</div>
-		);
+		return <Loading />;
 	}
 
 	return (
@@ -132,22 +129,22 @@ const ChatPage = () => {
 			<Sidebar />
 			<div className="flex-1 flex flex-col pl-[5rem] sm:pl-[5rem]">
 				{/* Header Section */}
-				<div className="sticky top-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md flex items-center hover:cursor-pointer">
-					<button
-						onClick={() => navigate(-1)}
-						className="mr-2 p-2 bg-blue-500 text-white rounded-md text-sm"
-					>
-						Go Back
-					</button>
+				<div className="sticky top-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md flex items-center justify-between">
 					<h1 className="text-[1rem] sm:text-[1.5rem] font-bold text-white truncate">
 						{chat_name}
 					</h1>
+					<button
+						onClick={() => navigate(-1)}
+						className="mr-2 p-2 bg-blue-500 text-white rounded-md text-sm hover:cursor-pointer"
+					>
+						Go Back
+					</button>
 				</div>
 
 				{/* Chat Messages Section */}
 				<div className="flex-1 p-[0.5rem] sm:p-[1rem] overflow-y-auto">
 					{loading && !user ? (
-						<div className="text-center text-white">Loading...</div>
+						<Loading />
 					) : (
 						<div className="space-y-3 sm:space-y-4 flex flex-col">
 							{currentChats.length > 0 ? (

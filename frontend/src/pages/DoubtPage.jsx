@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import SolutionBar from "../components/SolutionBar";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Loading from "../components/Loading";
 
 const DoubtPage = () => {
 	const BACKEND_URL = import.meta.env.VITE_DATABASE_URL;
@@ -48,59 +49,57 @@ const DoubtPage = () => {
 		}, 2000);
 	}
 
+	if (loading) return <Loading />;
+
 	return (
 		<div className="flex">
 			<Toaster />
 			<Sidebar />
+			{/* Header Section */}
 			<div className="flex-1 flex flex-col bg-gray-900 text-white min-h-screen pl-[5rem] sm:pl-[5rem]">
-				{/* Header Section */}
 				<div className="fixed top-0 left-[5rem] sm:left-[5rem] right-0 z-10 bg-gray-800 p-[0.5rem] sm:p-[1rem] shadow-md">
-					{loading ? (
-						<div className="text-sm sm:text-base">Loading...</div>
-					) : (
-						<div className="flex flex-col space-y-[0.5rem] sm:space-y-[1rem]">
-							<div className="flex justify-between items-center">
-								<h1 className="text-[1rem] sm:text-[1.5rem] font-bold text-white">
-									Subject: {doubt.subject}
-								</h1>
-								<div
-									className="hover:cursor-pointer text-blue-400 text-sm mt-2 md:mt-0"
-									onClick={() => navigate(`/dashboard/${studentDetails.id}`)}
-								>
-									Posted by:{" "}
-									<span className="relative inline-block group">
-										<span className="hover:text-white transition-colors duration-300 ease-in-out">
-											{studentDetails.name}
-										</span>
-										<span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
+					<div className="flex flex-col space-y-[0.5rem] sm:space-y-[1rem]">
+						<div className="flex justify-between items-center">
+							<h1 className="text-[1rem] sm:text-[1.5rem] font-bold text-white">
+								Subject: {doubt.subject}
+							</h1>
+							<div
+								className="hover:cursor-pointer text-blue-400 text-sm mt-2 md:mt-0"
+								onClick={() => navigate(`/dashboard/${studentDetails.id}`)}
+							>
+								Posted by:{" "}
+								<span className="relative inline-block group">
+									<span className="hover:text-white transition-colors duration-300 ease-in-out">
+										{studentDetails.name}
 									</span>
-								</div>
-							</div>
-							<div className="flex justify-between items-center text-xs sm:text-sm">
-								<div>Doubt For: {doubt.doubtFor}</div>
-								<div>Posted On: {formattedDate}</div>
-							</div>
-							<div className="text-xs sm:text-sm">
-								Doubt:{" "}
-								{read ? doubt.doubt : `${doubt.doubt.substring(0, 200)}...`}
-								<span
-									className="hover:cursor-pointer text-blue-500 ml-[0.25rem] sm:ml-[0.5rem]"
-									onClick={() => setRead(!read)}
-								>
-									{read ? "Read Less" : "Read More"}
+									<span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
 								</span>
 							</div>
-							{/* New Button for Chatroom Discussion */}
-							<div className="mt-2">
-								<button
-									className="bg-blue-500 text-white py-1 px-3 rounded-md text-xs sm:text-sm hover:bg-blue-600 transition"
-									onClick={() => navigate(`/chat/doubt_${doubt_id}`)}
-								>
-									Go to Chatroom Discussion
-								</button>
-							</div>
 						</div>
-					)}
+						<div className="flex justify-between items-center text-xs sm:text-sm">
+							<div>Doubt For: {doubt.doubtFor}</div>
+							<div>Posted On: {formattedDate}</div>
+						</div>
+						<div className="text-xs sm:text-sm">
+							Doubt:{" "}
+							{read ? doubt.doubt : `${doubt.doubt.substring(0, 200)}...`}
+							<span
+								className="hover:cursor-pointer text-blue-500 ml-[0.25rem] sm:ml-[0.5rem]"
+								onClick={() => setRead(!read)}
+							>
+								{read ? "Read Less" : "Read More"}
+							</span>
+						</div>
+						{/* New Button for Chatroom Discussion */}
+						<div className="mt-2">
+							<button
+								className="bg-blue-500 text-white py-1 px-3 rounded-md text-xs sm:text-sm hover:bg-blue-600 transition"
+								onClick={() => navigate(`/chat/doubt_${doubt_id}`)}
+							>
+								Go to Chatroom Discussion
+							</button>
+						</div>
+					</div>
 				</div>
 
 				{/* Solutions Section */}

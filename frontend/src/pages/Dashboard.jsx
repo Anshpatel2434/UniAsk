@@ -8,6 +8,7 @@ import HeatMap from "../components/HeatMap";
 import DoubtList from "../components/DoubtList";
 import { useStudent } from "../hooks/useStudent";
 import { useParams } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const Dashboard = () => {
 	const response = {
@@ -127,11 +128,11 @@ const Dashboard = () => {
 	const data = student;
 	return (
 		<div className="bg-gray-800">
-			<Sidebar />
 			{loading ? (
-				<div>Loading....</div>
+				<Loading />
 			) : (
 				<div className="flex justify-center min-h-screen bg-gray-800 p-4 ml-[4rem] sm:ml-24 md:ml-20 lg:ml-1">
+					<Sidebar />
 					<div className="flex flex-col md:flex-row justify-center items-start bg-gray-800 rounded-xl p-6 max-w-6xl w-full mx-auto space-y-4 md:space-y-0 md:space-x-8">
 						{/* Profile Card */}
 						<div className="w-full md:w-1/3 lg:w-1/4 flex-shrink-0 mr-8">

@@ -5,6 +5,7 @@ import { useSolution } from "../hooks/useSolution";
 import Sidebar from "./Sidebar";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import Loading from "./Loading";
 
 const SolutionInfo = () => {
 	const BACKEND_URL = import.meta.env.VITE_DATABASE_URL;
@@ -53,7 +54,7 @@ const SolutionInfo = () => {
 	}
 
 	if (loading) {
-		return <div className="text-center text-white">Loading...</div>;
+		return <Loading />;
 	}
 
 	return (
