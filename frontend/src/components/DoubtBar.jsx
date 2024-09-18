@@ -7,7 +7,7 @@ const DoubtBar = ({ doubt }) => {
 	const formattedDate = doubt.postedOn.split("T")[0];
 
 	return (
-		<div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
+		<div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
 			<div className="p-5">
 				{/* Subject */}
 				<h3 className="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-2">

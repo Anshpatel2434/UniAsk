@@ -125,7 +125,7 @@ const ChatPage = () => {
 	}
 
 	return (
-		<div className="flex flex-col min-h-screen bg-gray-900">
+		<div className="flex flex-col min-h-screen bg-gray-900 bg-yel">
 			<Sidebar />
 			<div className="flex-1 flex flex-col pl-[5rem] sm:pl-[5rem]">
 				{/* Header Section */}
