@@ -86,7 +86,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
   'http://localhost:5173',
-  'https://your-frontend-domain.com',  # Add your production frontend domain here
+  'https://uni-ask.vercel.app',  # Add your production frontend domain here
 )
 
 ROOT_URLCONF = 'admin.urls'
