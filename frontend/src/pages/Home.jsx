@@ -5,7 +5,6 @@ import "boxicons";
 const AboutUs = () => {
 	const [curImageIndex, setImageIndex] = useState(0);
 	useEffect(() => {
-		window.location.reload();
 		const interval = setInterval(() => {
 			setImageIndex((prevIndex) => (prevIndex + 1) % images.length);
 		}, 5000);
