@@ -95,7 +95,8 @@ const Signup = () => {
 				));
 			} else if (res.status === 200) {
 				const jwt = res.data.jwt;
-				localStorage.setItem("token", jwt);
+				console.log(jwt);
+				// localStorage.setItem("token", jwt);
 				toast("YOU HAVE SUCCESSFULLY LOGGED IN!", {
 					icon: "✅",
 					style: {
@@ -105,6 +106,7 @@ const Signup = () => {
 					},
 				});
 				setTimeout(() => {
+					localStorage.setItem("token", jwt);
 					setLoggedIn(true);
 					setUser({
 						name: res.data.name,
@@ -115,9 +117,8 @@ const Signup = () => {
 						batch: res.data.batch,
 					});
 					localStorage.setItem("loggedIn", "true");
-					window.location.reload();
 					navigate("/");
-				}, 1000);
+				}, 2000);
 			} else {
 				toast.error("Signup Failed");
 			}
