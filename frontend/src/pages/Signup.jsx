@@ -118,6 +118,7 @@ const Signup = () => {
 					});
 					localStorage.setItem("loggedIn", "true");
 					navigate("/");
+					window.location.reload();
 				}, 2000);
 			} else {
 				toast.error("Signup Failed");
