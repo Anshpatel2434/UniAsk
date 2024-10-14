@@ -2,10 +2,12 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path('wakeUp', WakeUpView.as_view()),
     path("student/students", StudentView.as_view()),
     path("student/addStudent", CreateStudentView.as_view()),
     path("student/signup", StudentSignupView.as_view()),
     path("student/signin", StudentSigninView.as_view()),
+    path("student/getOtp", GetOtpView.as_view()),
     path("student/getStudent", GetStudentView.as_view()),
     path("student/setGender", SetGender.as_view()),
     path("student/getStudentById/<int:student_id>", GetStudentByIdView.as_view()),

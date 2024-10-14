@@ -41,8 +41,10 @@ const ChatPage = () => {
 	};
 
 	useEffect(() => {
-		if (isCreated && !loading && chats.messages) {
-			setCurrentChats(chats.messages);
+		if (isCreated && !loading && chats) {
+			if (chats) {
+				setCurrentChats(chats.messages);
+			}
 		}
 	}, [chats, loading, isCreated]);
 

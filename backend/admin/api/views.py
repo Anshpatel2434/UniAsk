@@ -9,8 +9,17 @@ from django.utils import timezone
 from django.contrib.auth.hashers import make_password,check_password
 from rest_framework.permissions import AllowAny
 from django.conf import settings
+import random
+from .sendMail import sendMail
 
 # Create your views here.
+class WakeUpView(APIView):
+    def get(self, request):
+        return Response({
+            "status": "200",
+            "message": "Wake Up"
+        })
+
 class StudentView(generics.ListAPIView):
     queryset = Student.objects.all() 
     serializer_class = StudentSerializer
@@ -35,39 +44,75 @@ class CreateStudentView(generics.CreateAPIView):
         # Return a response with the serialized data
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+class GetOtpView(APIView):
+    permission_classes = [AllowAny]
+    otp = 0
+    student = None
+
+    def post(self, request):
+        email = request.data.get('email')
+        enr_no = request.data.get('enr_no')
+
+        try:
+            student = Student.objects.filter(enr_no=enr_no).first()
+            if not student:
+                return Response({
+                    'status': 404,
+                    'message': 'Incorrect Enrollment Number'
+                })
+
+            if student.password:
+                return Response({
+                    'status': 400,
+                    'message': 'Account Already exists, Please SignIn'
+                })
+
+            code = random.randint(1000, 9999)
+            GetOtpView.otp = code
+            GetOtpView.student = student
+
+            sendMail(email=email, code=code)
+            return Response({
+                'status': 200,
+                'message': 'OTP sent Successfully to ' + email
+            })
+        except Exception as e:
+            return Response({
+                'status': 500,
+                'message': 'Error while processing request',
+                'error': str(e)
+            })
+
 class StudentSignupView(APIView):
     permission_classes = [AllowAny]
 
-
     def post(self, request, format=None):
         serializer = StudentSignupSerializer(data=request.data)
+        curr_otp = request.data.get('otp')
+
         if serializer.is_valid():
             try:
-                student = Student.objects.filter(enr_no=serializer.validated_data.get('enr_no')).first()
-                if student:
-                    if student.password:
-                        return Response({
-                            'status': 400,
-                            'message': 'Account Already exists, Please SignIn'
-                        })
-                    else:
-                        student.password = make_password(serializer.validated_data.get('password'))
-                        student.save(update_fields=['password'])
-                        jwt_token = self.create_jwt(student)
-                        return Response({
-                            'status': 200,
-                            'jwt': jwt_token, 
-                            'student': student.name,
-                            'enr_no': student.enr_no,
-                            'dep':student.dep,
-                            'branch':student.branch,
-                            'roll_no':student.roll_no,
-                            'batch':student.batch,})
-                else:
+                if GetOtpView.otp != int(curr_otp):
                     return Response({
-                        'status': 404,
-                        'message': 'Incorrect Enrollment Number'
+                        'status': 401,
+                        'message': 'Incorrect OTP'
                     })
+
+                student = GetOtpView.student
+                student.password = make_password(serializer.validated_data.get('password'))
+                student.save(update_fields=['password'])
+
+                jwt_token = self.create_jwt(student)
+                return Response({
+                    'status': 200,
+                    'jwt': jwt_token,
+                    'student': student.name,
+                    'enr_no': student.enr_no,
+                    'dep': student.dep,
+                    'branch': student.branch,
+                    'roll_no': student.roll_no,
+                    'batch': student.batch,
+                })
             except Exception as e:
                 return Response({
                     'status': 500,
@@ -75,7 +120,6 @@ class StudentSignupView(APIView):
                     'error': str(e)
                 })
         else:
-            print(serializer.error_messages)
             return Response({
                 'status': 406,
                 'message': serializer.errors['password'][0]
@@ -99,6 +143,26 @@ class StudentSigninView(APIView):
             try:
                 student = Student.objects.filter(enr_no=serializer.validated_data.get('enr_no')).first()
                 if student:
+                    if(student.branch == "Demo"):
+                        print(serializer.validated_data.get("password"))
+                        print(student.password)
+                        if(serializer.validated_data.get("password") != student.password):
+                           return Response({
+                                'status': 401,
+                                'message': 'Incorrect Password'
+                            }) 
+                        else:
+                            jwt_token = self.create_jwt(student)
+                            return Response({
+                                'status': 201,
+                                'jwt': jwt_token,
+                                'name': student.name,
+                                'enr_no': student.enr_no,
+                                'dep':student.dep,
+                                'branch':student.branch,
+                                'roll_no':student.roll_no,
+                                'batch':student.batch,
+                            })
                     if not check_password(serializer.validated_data.get('password'), student.password):
                         return Response({
                             'status': 401,
@@ -189,7 +253,7 @@ class GetStudentView(APIView):
                 'status': 500,
                 'message': 'Error while fetching user data',
                 'error': str(e)
-            })
+            })   
         
 class PostDoubtView(APIView):
     permission_classes = [AllowAny]

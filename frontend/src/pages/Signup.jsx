@@ -18,6 +18,8 @@ const Signup = () => {
 		password: "",
 		confirmPassword: "",
 	});
+	const [showOtpPopup, setShowOtpPopup] = useState(false);
+	const [otp, setOtp] = useState(["", "", "", ""]);
 
 	function handleChange(e, field) {
 		setUserInput({
@@ -52,64 +54,46 @@ const Signup = () => {
 		}
 	}, [navigate]);
 
-	function checkPasswords() {
-		if (userInput.password === userInput.confirmPassword) {
-			sendRequest();
-		} else {
-			toast((t) => (
-				<div className="flex justify-between bg-red-700 text-white p-4 rounded-md shadow-lg -mx-5 -my-3">
-					<span className="font-bold">{"Passwords do not match"}</span>
-					<button
-						className="ml-2 text-red-500"
-						onClick={() => {
-							toast.dismiss(t.id);
-						}}
-					>
-						❌
-					</button>
-				</div>
-			));
+	async function handleSignup() {
+		if (userInput.password !== userInput.confirmPassword) {
+			toast.error("Passwords do not match");
+			return;
+		}
+
+		try {
+			const res = await axios.post(`${BACKEND_URL}/api/v1/student/getOtp`, {
+				email: `${userInput.enr_no}@ljku.edu.in`,
+				enr_no: userInput.enr_no,
+			});
+
+			if (res.data.status === 200) {
+				setShowOtpPopup(true);
+			} else {
+				toast.error(res.data.message);
+			}
+		} catch (error) {
+			console.error(error);
+			toast.error("Failed to send OTP. Please try again.");
 		}
 	}
 
-	async function sendRequest() {
-		console.log(userInput);
+	async function handleOtpSubmit() {
+		const otpString = otp.join("");
 		try {
 			const res = await axios.post(`${BACKEND_URL}/api/v1/student/signup`, {
-				enr_no: userInput.enr_no || "1", // Ensure correct type
+				enr_no: userInput.enr_no,
 				password: userInput.password,
+				otp: otpString,
 			});
-			if (res.status !== 200) {
-				toast((t) => (
-					<div className="flex justify-between bg-red-700 text-white p-4 rounded-md shadow-lg -mx-5 -my-3">
-						<span className="font-bold">{res.data.message}</span>
-						<button
-							className="ml-2 text-red-500"
-							onClick={() => {
-								toast.dismiss(t.id);
-							}}
-						>
-							❌
-						</button>
-					</div>
-				));
-			} else if (res.status === 200) {
+
+			if (res.data.status === 200) {
 				const jwt = res.data.jwt;
-				console.log(jwt);
-				// localStorage.setItem("token", jwt);
-				toast("YOU HAVE SUCCESSFULLY LOGGED IN!", {
-					icon: "✅",
-					style: {
-						borderRadius: "10px",
-						background: "#333",
-						color: "#fff",
-					},
-				});
+				toast.success("You have successfully signed up!");
 				setTimeout(() => {
 					localStorage.setItem("token", jwt);
 					setLoggedIn(true);
 					setUser({
-						name: res.data.name,
+						name: res.data.student,
 						enr_no: res.data.enr_no,
 						dep: res.data.dep,
 						branch: res.data.branch,
@@ -121,11 +105,22 @@ const Signup = () => {
 					window.location.reload();
 				}, 2000);
 			} else {
-				toast.error("Signup Failed");
+				toast.error(res.data.message);
 			}
 		} catch (error) {
-			console.log(error);
-			toast.error("Signup Failed");
+			console.error(error);
+			toast.error("Signup failed. Please try again.");
+		}
+	}
+
+	function handleOtpChange(index, value) {
+		const newOtp = [...otp];
+		newOtp[index] = value;
+		setOtp(newOtp);
+
+		// Move focus to the next input
+		if (value && index < 3) {
+			document.getElementById(`otp-${index + 1}`).focus();
 		}
 	}
 
@@ -194,7 +189,7 @@ const Signup = () => {
 							</div>
 							<button
 								className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-								onClick={checkPasswords}
+								onClick={handleSignup}
 							>
 								Sign Up
 							</button>
@@ -238,6 +233,35 @@ const Signup = () => {
 				className="absolute top-5 right-5 text-white text-3xl hover:text-gray-300 cursor-pointer transition-colors duration-200"
 				onClick={() => navigate("/")}
 			/>
+
+			{showOtpPopup && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+					<div className="bg-[#1d1b31] p-8 rounded-xl shadow-2xl w-96">
+						<h3 className="text-2xl font-bold text-white mb-6 text-center">
+							Check Your LJ Email For The OTP
+						</h3>
+						<div className="flex justify-between mb-6">
+							{otp.map((digit, index) => (
+								<input
+									key={index}
+									id={`otp-${index}`}
+									type="text"
+									maxLength="1"
+									value={digit}
+									onChange={(e) => handleOtpChange(index, e.target.value)}
+									className="w-14 h-14 text-center text-2xl font-bold bg-[#2a2849] text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+								/>
+							))}
+						</div>
+						<button
+							onClick={handleOtpSubmit}
+							className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+						>
+							Confirm OTP
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

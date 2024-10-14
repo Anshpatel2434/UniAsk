@@ -51,10 +51,19 @@ const AppContextProvider = ({ children }) => {
 		}
 	}
 
+	async function wakeUpCall() {
+		try {
+			await axios.get(`${BACKEND_URL}/api/v1/wakeUp`);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
 			sendRequest();
 		}
+		wakeUpCall();
 	}, []);
 
 	return (
