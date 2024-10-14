@@ -77,10 +77,6 @@ For demonstration purposes, you can use any of the following demo accounts:
 
 We welcome contributions to UniAsk! Please read our contributing guidelines to get started.
 
-## 📞 Support
-
-If you encounter any issues or have questions, please open an issue in the GitHub repository or contact our support team at support@uniask.com.
-
 ## 📄 License
 
 UniAsk is released under the MIT License. See the LICENSE file for more details.
