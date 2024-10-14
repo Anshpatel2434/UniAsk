@@ -45,7 +45,9 @@ npm install
 npm run dev
 ```
 
-## 🔑 Authentication
+## 🔑 Visit Our Website
+
+Link - https://uni-ask.vercel.app
 
 ### For LJ University Students
 If you're a student from LJ University, you can directly sign up or sign in using your enrollment number.
