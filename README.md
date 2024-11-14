@@ -4,6 +4,37 @@
 
 UniAsk is an innovative platform designed to revolutionize the way students interact, share knowledge, and solve academic queries. Our platform aims to create a vibrant community of learners, providing a seamless environment for posting doubts, sharing solutions, and engaging in meaningful academic discussions.
 
+## 🔑 Visit Our Website
+
+Link - https://uni-ask.vercel.app
+- Please wait for 1 minute to let the backend server wake up from sleep
+
+### For LJ University Students
+If you're a student from LJ University, you can directly sign up or sign in using your enrollment number.
+
+### For Other Users
+For demonstration purposes, you can use any of the following demo accounts:
+
+1. **MICHAEL SMITH**
+   - Enrollment: 22004562310543
+   - Password: michael123
+
+2. **EMMA JOHNSON**
+   - Enrollment: 22001673450829
+   - Password: emma456
+
+3. **JACOB WILLIAMS**
+   - Enrollment: 22003218710956
+   - Password: jacob789
+
+4. **OLIVIA BROWN**
+   - Enrollment: 22005431612078
+   - Password: olivia321
+
+5. **JAMES MILLER**
+   - Enrollment: 22009834121705
+   - Password: james654
+
 ## ✨ Key Features
 
 - 🔐 **Secure Authentication:** JWT-based authentication system for user security.
@@ -44,37 +75,6 @@ cd frontend
 npm install
 npm run dev
 ```
-
-## 🔑 Visit Our Website
-
-Link - https://uni-ask.vercel.app
-- Please wait for 1 minute to let the backend server wake up from sleep
-
-### For LJ University Students
-If you're a student from LJ University, you can directly sign up or sign in using your enrollment number.
-
-### For Other Users
-For demonstration purposes, you can use any of the following demo accounts:
-
-1. **MICHAEL SMITH**
-   - Enrollment: 22004562310543
-   - Password: michael123
-
-2. **EMMA JOHNSON**
-   - Enrollment: 22001673450829
-   - Password: emma456
-
-3. **JACOB WILLIAMS**
-   - Enrollment: 22003218710956
-   - Password: jacob789
-
-4. **OLIVIA BROWN**
-   - Enrollment: 22005431612078
-   - Password: olivia321
-
-5. **JAMES MILLER**
-   - Enrollment: 22009834121705
-   - Password: james654
 
 ## 🤝 Contributing
 
