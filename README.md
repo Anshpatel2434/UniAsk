@@ -79,7 +79,3 @@ npm run dev
 ## 🤝 Contributing
 
 We welcome contributions to UniAsk! Please read our contributing guidelines to get started.
-
-## 📄 License
-
-UniAsk is released under the MIT License. See the LICENSE file for more details.
